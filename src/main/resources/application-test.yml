@@ -1,16 +1,17 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: ${FEEDOONG_DB_URL}
-    username: ${FEEDOONG_DB_USERNAME}
-    password: ${FEEDOONG_DB_PASSWORD}
+    url: ${TEST_FEEDOONG_DB_URL}
+    username: ${TEST_FEEDOONG_DB_USERNAME}
+    password: ${TEST_FEEDOONG_DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
 logging:
   level:
     org.hibernate.sql: debug
