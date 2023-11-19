@@ -2,21 +2,26 @@ name: "Feature"
 description: "새로운 기능 추가"
 labels: "Feature"
 body:
-- type: textarea
-  attributes:
-  label: Describe
-  description: 새로운 기능 설명
-  placeholder:
-  validations:
-  required: true
-- type: textarea
-  attributes:
-  label: Tasks
-  description: Task 작성
-  placeholder:
-  validations:
-  required: true
-- type: textarea
-  attributes:
-  label: 기타
-  description: 기타
+  - type: textarea
+    attributes:
+      label: Describe
+      description: 새로운 기능 설명
+      placeholder: 새로운 기능에 대한 설명을 여기에 적어주세요.
+      value: "- 기능 설명"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Tasks
+      description: Task 작성
+      placeholder: 수행할 태스크를 여기에 적어주세요.
+      value: "- [ ] 태스크"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 기타
+      description: 기타 사항
+      placeholder: 기타 사항이 있다면 여기에 적어주세요.
+    validations:
+      required: false
