@@ -1,18 +1,17 @@
-name: "Feature"
-description: "새로운 기능 추가"
-labels: "Feature"
+name: "Refactor"
+description: "리팩토링 요소 추가"
+labels: "Refactor"
 body:
   - type: textarea
     attributes:
       label: 🎙 Describe
-      description: 새로운 기능에 대한 설명을 작성해 주세요.
+      description: 왜 리팩토링을 해야 하는지 설명해 주세요.
     validations:
       required: true
   - type: textarea
     attributes:
       label: 📌 Tasks
-      description: 수행할 태스크를 여기에 적어주세요.
-      value: "- [ ] 태스크"
+      description: 리팩토링을 해야 할 부분에 대해 설명해 주세요.
     validations:
       required: true
   - type: textarea
