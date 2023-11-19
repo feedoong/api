@@ -1,0 +1,22 @@
+name: "Feature"
+description: "새로운 기능 추가"
+labels: "Feature"
+body:
+- type: textarea
+  attributes:
+  label: Describe
+  description: 새로운 기능 설명
+  placeholder:
+  validations:
+  required: true
+- type: textarea
+  attributes:
+  label: Tasks
+  description: Task 작성
+  placeholder:
+  validations:
+  required: true
+- type: textarea
+  attributes:
+  label: 기타
+  description: 기타
