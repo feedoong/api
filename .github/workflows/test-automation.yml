@@ -1,0 +1,40 @@
+name: Test Automation
+
+on:
+  push:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_USER: user
+          MARIADB_PASSWORD: password
+          MARIADB_ROOT_PASSWORD: rootpassword
+          MARIADB_DATABASE: dbname
+        ports:
+          - 3306:3306
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+
+    - name: Run tests
+      env:
+        TEST_FEEDOONG_DB_URL: jdbc:mariadb://localhost:3306/dbname
+        TEST_FEEDOONG_DB_USERNAME: user
+        TEST_FEEDOONG_DB_PASSWORD: password
+      run: ./gradlew test
