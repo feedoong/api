@@ -2,18 +2,16 @@ package io.feedoong.api.shared.util;
 
 import io.feedoong.api.global.exception.CustomException;
 import io.feedoong.api.global.exception.ErrorCode;
-import org.assertj.core.api.ThrowableAssert;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CustomExceptionAssert {
 
-    private final ThrowableAssert.ThrowingCallable throwingCallable;
     private CustomException caughtException;
 
-    public CustomExceptionAssert(ThrowableAssert.ThrowingCallable throwingCallable) {
-        this.throwingCallable = throwingCallable;
+    public CustomExceptionAssert(ThrowingCallable throwingCallable) {
 
         assertThatThrownBy(throwingCallable)
                 .isInstanceOf(CustomException.class)
