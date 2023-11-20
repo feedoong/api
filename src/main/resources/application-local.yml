@@ -6,7 +6,7 @@ spring:
     password: ${FEEDOONG_DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
@@ -15,3 +15,6 @@ logging:
   level:
     org.hibernate.sql: debug
     org.springframework.security: debug
+
+jwt:
+  secret: "secret"
