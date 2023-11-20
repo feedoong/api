@@ -1,0 +1,20 @@
+package io.feedoong.api.global.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> customExceptionHandler(CustomException e) {
+        ErrorCode errorCode = e.getErrorCode();
+
+        return new ResponseEntity<>(
+                new ErrorResponse(errorCode),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+}
