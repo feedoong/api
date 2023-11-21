@@ -40,15 +40,13 @@ class UserHelperTest extends BaseHelperTest {
             @BeforeEach
             void prepare() {
                 email = "wrong@gmail.com";
-                when(userRepository.findByEmail(email))
-                        .thenReturn(Optional.empty());
+                when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
             }
 
             @Test
             @DisplayName("USER_NOT_FOUND CustomException을 던진다.")
             public void shouldThrow_USER_NOT_FOUND_CustomException() throws Exception {
-                assertThrowsCustomException(() -> userHelper.getByEmail(email))
-                        .with(ErrorCode.USER_NOT_FOUND);
+                assertThrowsCustomException(() -> userHelper.getByEmail(email)).with(ErrorCode.USER_NOT_FOUND);
             }
         }
 
@@ -63,8 +61,7 @@ class UserHelperTest extends BaseHelperTest {
             void prepare() {
                 user = UserFactory.create();
                 email = user.getEmail();
-                when(userRepository.findByEmail(email))
-                        .thenReturn(Optional.of(user));
+                when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
             }
 
             @Test
