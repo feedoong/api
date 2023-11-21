@@ -12,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -22,6 +23,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticatedPathMatcher authenticatedPathMatcher;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     private final BadCredentialsExceptionFilter badCredentialsExceptionFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
@@ -40,6 +42,7 @@ public class SecurityConfig {
                 .addFilterBefore(badCredentialsExceptionFilter, JwtAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, BadCredentialsExceptionFilter.class)
                 .addFilterBefore(globalExceptionFilter, JwtExceptionFilter.class)
+                .exceptionHandling((exceptionHandling) -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
                 .build();
     }
 }

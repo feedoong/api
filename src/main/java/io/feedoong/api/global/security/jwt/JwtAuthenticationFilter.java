@@ -1,6 +1,5 @@
 package io.feedoong.api.global.security.jwt;
 
-import io.feedoong.api.global.security.AuthenticatedPathMatcher;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,14 +19,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private final JwtAuthenticationManager jwtAuthenticationManager;
-    private final AuthenticatedPathMatcher authenticatedPathMatcher;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (authenticatedPathMatcher.matches(request)) {
-            String authorization = request.getHeader(AUTHORIZATION_HEADER);
+        String authorization = request.getHeader(AUTHORIZATION_HEADER);
+
+        if (authorization != null) {
             JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(AuthorityUtils.NO_AUTHORITIES, authorization);
             Authentication authenticate = jwtAuthenticationManager.authenticate(jwtAuthenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authenticate);
