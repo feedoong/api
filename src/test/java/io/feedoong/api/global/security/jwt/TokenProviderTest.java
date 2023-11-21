@@ -37,12 +37,12 @@ class TokenProviderTest {
             }
 
             @Test
-            @DisplayName("올바른 형식의 JWT Token을 리턴한다.")
+            @DisplayName("올바른 형식의 Bearer Token을 리턴한다.")
             public void should() throws Exception {
-                String jwtToken = tokenProvider.create(user);
+                String bearerToken = tokenProvider.create(user);
 
-                assertThat(jwtToken).isNotNull();
-                assertThat(jwtToken).startsWith("Bearer ");
+                assertThat(bearerToken).isNotNull();
+                assertThat(bearerToken).startsWith("Bearer ");
             }
         }
 
@@ -142,19 +142,19 @@ class TokenProviderTest {
         @DisplayName("유효한 JWT 토큰이 주어지면")
         class WithValidJwtToken {
 
-            private String parsedToken;
+            private String validJwtToken;
 
             @BeforeEach
             void setUp() {
                 User user = UserFactory.create();
-                String jwtToken = tokenProvider.create(user);
-                parsedToken = tokenProvider.parseBearerToken(jwtToken);
+                String bearerToken = tokenProvider.create(user);
+                validJwtToken = tokenProvider.parseBearerToken(bearerToken);
             }
 
             @Test
             @DisplayName("예외를 발생시키지 않는다.")
             void shouldNotThrowException() {
-                assertDoesNotThrow(() -> tokenProvider.validate(parsedToken));
+                assertDoesNotThrow(() -> tokenProvider.validate(validJwtToken));
             }
         }
 
@@ -186,19 +186,19 @@ class TokenProviderTest {
         class WithValidJwtToken {
 
             private User user;
-            private String validToken;
+            private String validJwtToken;
 
             @BeforeEach
             void setUp() {
                 user = UserFactory.create();
                 String bearerToken = tokenProvider.create(user);
-                validToken = tokenProvider.parseBearerToken(bearerToken);
+                validJwtToken = tokenProvider.parseBearerToken(bearerToken);
             }
 
             @Test
             @DisplayName("토큰에서 올바른 사용자 이메일을 반환한다.")
             void shouldReturnCorrectEmail() {
-                String result = tokenProvider.getSubject(validToken);
+                String result = tokenProvider.getSubject(validJwtToken);
 
                 assertThat(result).isEqualTo(user.getEmail());
             }
