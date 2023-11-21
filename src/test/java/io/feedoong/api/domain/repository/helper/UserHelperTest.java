@@ -69,9 +69,7 @@ class UserHelperTest extends BaseHelperTest {
             public void shouldReturn_User() throws Exception {
                 User result = userHelper.getByEmail(email);
 
-                assertThat(result)
-                        .usingRecursiveComparison()
-                        .isEqualTo(user);
+                assertThat(result).usingRecursiveComparison().isEqualTo(user);
             }
         }
     }
