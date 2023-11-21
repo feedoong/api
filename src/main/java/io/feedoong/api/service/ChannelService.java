@@ -2,7 +2,6 @@ package io.feedoong.api.service;
 
 import io.feedoong.api.domain.Channel;
 import io.feedoong.api.domain.Subscription;
-import io.feedoong.api.domain.User;
 import io.feedoong.api.domain.repository.SubscriptionRepository;
 import io.feedoong.api.domain.repository.helper.UserHelper;
 import io.feedoong.api.service.dto.ChannelDetailsDTO;
@@ -28,29 +27,28 @@ public class ChannelService {
         // Pageable limit에 맞춰 가장 최근 구독된 채널 조회
         Page<Subscription> subscriptions = subscriptionRepository.findMostRecentSubscriptionsByChannel(pageable);
         List<Long> channelIds = getChannelIds(subscriptions.getContent());
+        Set<Long> subscriptionIds = getSubscriptionIds(requestUser, channelIds).orElse(Collections.emptySet());
 
-        // 사용자가 로그인한 경우에만 구독 여부를 체크
-        User user = (requestUser != null)
-                ? userHelper.getByEmail(requestUser.getUsername())
-                : null;
-
-        Set<Long> subscribedChannelIds = (user != null)
-                ? new HashSet<>(subscriptionRepository.findSubscribedChannelIdsByUser(user, channelIds))
-                : Collections.emptySet();
-
-        return subscriptions.getContent().stream().map(subscription -> {
-            boolean isSubscribed = isChannelSubscribed(subscription, subscribedChannelIds);
-            Channel channel = subscription.getChannel();
-            return buildChannelDetailsDTO(channel, isSubscribed);
-        }).collect(Collectors.toList());
+        return subscriptions.stream()
+                .map(subscription -> {
+                    Channel channel = subscription.getChannel();
+                    boolean isSubscribed = subscriptionIds.contains(channel.getId());
+                    return buildChannelDetailsDTO(channel, isSubscribed);
+                })
+                .collect(Collectors.toList());
     }
 
     private static List<Long> getChannelIds(List<Subscription> subscriptions) {
-        return subscriptions.stream().map(subscription -> subscription.getChannel().getId()).toList();
+        return subscriptions.stream()
+                .map(subscription -> subscription.getChannel().getId())
+                .toList();
     }
 
-    private static boolean isChannelSubscribed(Subscription subscription, Set<Long> subscribedChannelIds) {
-        return subscribedChannelIds != null && subscribedChannelIds.contains(subscription.getChannel().getId());
+    private Optional<Set<Long>> getSubscriptionIds(UserDetails requestUser, List<Long> channelIds) {
+        return  Optional.ofNullable(requestUser)
+                .map(UserDetails::getUsername)
+                .map(userHelper::getByEmail)
+                .map(user -> new HashSet<>(subscriptionRepository.findSubscribedChannelIdsByUser(user, channelIds)));
     }
 
     private static ChannelDetailsDTO buildChannelDetailsDTO(Channel channel, boolean isSubscribed) {
