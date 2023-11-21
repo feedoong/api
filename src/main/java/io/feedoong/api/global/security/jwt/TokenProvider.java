@@ -2,11 +2,9 @@ package io.feedoong.api.global.security.jwt;
 
 import io.feedoong.api.domain.User;
 import io.jsonwebtoken.*;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.time.Instant;
@@ -14,12 +12,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Slf4j
-@NoArgsConstructor
-@Component
+@RequiredArgsConstructor
 public class TokenProvider {
 
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    private final String SECRET_KEY;
 
     private static final String ISSUER = "feedoong";
     private static final String BEARER_PREFIX = "Bearer ";
