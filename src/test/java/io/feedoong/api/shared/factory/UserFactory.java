@@ -11,4 +11,12 @@ public class UserFactory {
                 .username("bigfanoftim")
                 .build();
     }
+
+    public static User createWithEmailUsername(String email, String username) {
+        return User.builder()
+                .name("john")
+                .email(email)
+                .username(username)
+                .build();
+    }
 }
