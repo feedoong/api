@@ -49,6 +49,14 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs += "$projectDir/build/generated"
+        }
+    }
+}
+
 ext {
     snippetsDir = file('build/generated-snippets')
 }
@@ -73,12 +81,4 @@ asciidoctor {
     configurations 'asciidoctorExt'
     dependsOn test
     baseDir file('src/docs/asciidoc')
-
-    /**
-     * Performs post-processing tasks after generating HTML documentation.
-     * This ensures the generated 'rest-api.html' to 'index.html' for Github Pages deployment.
-     */
-    doLast {
-        file('rest-api.html').renameTo(file('index.html'))
-    }
 }

@@ -18,9 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromRequest;
+import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromResponse;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -84,7 +92,31 @@ class SubscriptionControllerDocsTest {
                     .andExpect(jsonPath("$.totalPages").value(1))
                     .andExpect(jsonPath("$.totalElements").value(1))
                     .andExpect(jsonPath("$.page").value(0))
-                    .andExpect(jsonPath("$.size").value(10));
+                    .andExpect(jsonPath("$.size").value(10))
+                    .andDo(document("v2/subscriptions",
+                            fromRequest(),
+                            fromResponse(),
+                            queryParameters(
+                                    parameterWithName("page").description("페이지 번호 (0부터 시작)"),
+                                    parameterWithName("size").description("한 페이지 당 반환되는 항목의 수"),
+                                    parameterWithName("sort").description("정렬 기준이 되는 필드 (예: 'createdAt')"),
+                                    parameterWithName("direction").description("정렬 방향 (asc 또는 desc)")
+                            ),
+                            PayloadDocumentation.responseFields(
+                                    fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
+                                    fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
+                                    fieldWithPath("page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                    fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 당 항목 수"),
+                                    fieldWithPath("contents").type(JsonFieldType.ARRAY).description("현재 페이지의 콘텐츠 목록"),
+                                    fieldWithPath("contents[].id").type(JsonFieldType.NUMBER).description("채널 ID"),
+                                    fieldWithPath("contents[].title").type(JsonFieldType.STRING).description("채널 제목"),
+                                    fieldWithPath("contents[].description").type(JsonFieldType.STRING).description("채널 설명"),
+                                    fieldWithPath("contents[].url").type(JsonFieldType.STRING).description("채널 URL"),
+                                    fieldWithPath("contents[].feedUrl").type(JsonFieldType.STRING).description("피드 URL"),
+                                    fieldWithPath("contents[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL"),
+                                    fieldWithPath("contents[].isSubscribed").type(JsonFieldType.BOOLEAN).description("구독 여부")
+                            )
+                    ));
         }
     }
 }
