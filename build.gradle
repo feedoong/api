@@ -49,14 +49,6 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs += "$projectDir/build/generated"
-        }
-    }
-}
-
 ext {
     snippetsDir = file('build/generated-snippets')
 }
@@ -65,20 +57,18 @@ test {
     outputs.dir snippetsDir
 }
 
-/**
- * Used to generate HTML API Documentation
- */
 asciidoctor {
-    sourceDir file('src/docs/asciidoc')
-    sources {
-        include 'rest-api.adoc'
-    }
-    outputDir = file('.')
-    outputOptions {
-        backends = ['html5']
-    }
-    inputs.dir snippetsDir
-    configurations 'asciidoctorExt'
     dependsOn test
+    configurations 'asciidoctorExt'
     baseDir file('src/docs/asciidoc')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
 }
