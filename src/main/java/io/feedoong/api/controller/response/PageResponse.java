@@ -7,11 +7,14 @@ import java.util.List;
 
 @Getter
 public class PageResponse<T> {
-    List<T> contents;
-    int totalPages;
-    long totalElements;
-    long page;
-    long size;
+    private final List<T> contents;
+    private final int totalPages;
+    private final long totalElements;
+    private final long page;
+    private final long size;
+    private final Boolean hasNext;
+    private final Boolean isFirst;
+    private final Boolean isLast;
 
     public PageResponse(Page<T> page) {
         this.contents = page.getContent();
@@ -19,5 +22,8 @@ public class PageResponse<T> {
         this.totalElements = page.getTotalElements();
         this.page = page.getNumber();
         this.size = page.getSize();
+        this.hasNext = page.hasNext();
+        this.isFirst = page.isFirst();
+        this.isLast = page.isLast();
     }
 }

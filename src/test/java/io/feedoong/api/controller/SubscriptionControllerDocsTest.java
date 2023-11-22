@@ -93,6 +93,9 @@ class SubscriptionControllerDocsTest {
                     .andExpect(jsonPath("$.totalElements").value(1))
                     .andExpect(jsonPath("$.page").value(0))
                     .andExpect(jsonPath("$.size").value(10))
+                    .andExpect(jsonPath("$.hasNext").value(false))
+                    .andExpect(jsonPath("$.isFirst").value(true))
+                    .andExpect(jsonPath("$.isLast").value(true))
                     .andDo(document("v2/subscriptions",
                             fromRequest(),
                             fromResponse(),
@@ -107,6 +110,9 @@ class SubscriptionControllerDocsTest {
                                     fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
                                     fieldWithPath("page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                     fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 당 항목 수"),
+                                    fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재 여부"),
+                                    fieldWithPath("isFirst").type(JsonFieldType.BOOLEAN).description("현재 페이지가 첫 번째 페이지인지 여부"),
+                                    fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("현재 페이지가 마지막 페이지인지 여부"),
                                     fieldWithPath("contents").type(JsonFieldType.ARRAY).description("현재 페이지의 콘텐츠 목록"),
                                     fieldWithPath("contents[].id").type(JsonFieldType.NUMBER).description("채널 ID"),
                                     fieldWithPath("contents[].title").type(JsonFieldType.STRING).description("채널 제목"),
