@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 @DataJpaTest
 @ActiveProfiles("test")
 public abstract class BaseRepositoryTest {
-
     @PersistenceContext
     protected EntityManager em;
 }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class SubscriptionService {
-
     private final ChannelHelper channelHelper;
     private final UserHelper userHelper;
 

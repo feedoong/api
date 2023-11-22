@@ -7,7 +7,10 @@ import io.feedoong.api.shared.base.BaseRepositoryTest;
 import io.feedoong.api.shared.factory.ChannelFactory;
 import io.feedoong.api.shared.factory.SubscriptionFactory;
 import io.feedoong.api.shared.factory.UserFactory;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ChannelRepository 인터페이스")
 class ChannelRepositoryTest extends BaseRepositoryTest {
-
     @Autowired
     private UserRepository userRepository;
 
@@ -32,11 +34,9 @@ class ChannelRepositoryTest extends BaseRepositoryTest {
     @Nested
     @DisplayName("findSubscribedChannelsByUser 메소드")
     class FindSubscribedChannelsByUser {
-
         @Nested
         @DisplayName("유저가 구독한 채널이 있으면")
         class WithSubscribedChannels {
-
             private Channel channel;
             private User john;
             private User andy;
@@ -79,7 +79,6 @@ class ChannelRepositoryTest extends BaseRepositoryTest {
         @Nested
         @DisplayName("유저가 구독한 채널이 없으면")
         class WithoutSubscribedChannels {
-
             private User user;
 
             @BeforeEach

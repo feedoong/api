@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 public class ChannelHelper {
-
     private final ChannelRepository channelRepository;
 
     public Page<ChannelDetailsDTO> getSubscribedChannels(Pageable pageable, User user) {

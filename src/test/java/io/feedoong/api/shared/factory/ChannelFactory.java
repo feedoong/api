@@ -3,7 +3,6 @@ package io.feedoong.api.shared.factory;
 import io.feedoong.api.domain.Channel;
 
 public class ChannelFactory {
-
     public static Channel create() {
         return Channel.builder()
                 .title("feedoong.log")
