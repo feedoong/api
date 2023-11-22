@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class TokenProviderConfig {
 
     @Value("${jwt.secret}")
-    private static String SECRET_KEY;
+    private String SECRET_KEY;
 
     @Bean
     public TokenProvider tokenProvider() {
