@@ -1,8 +1,8 @@
 package io.feedoong.api.service;
 
 import io.feedoong.api.domain.User;
-import io.feedoong.api.domain.repository.helper.ChannelHelper;
-import io.feedoong.api.domain.repository.helper.UserHelper;
+import io.feedoong.api.service.helper.ChannelHelper;
+import io.feedoong.api.service.helper.UserHelper;
 import io.feedoong.api.service.dto.ChannelDetailsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
