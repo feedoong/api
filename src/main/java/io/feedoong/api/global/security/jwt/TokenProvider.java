@@ -42,7 +42,6 @@ public class TokenProvider {
 
     public String parseBearerToken(String bearerToken) {
         if (!isBearerToken(bearerToken)) {
-            log.warn("Bearer Token 파싱 오류");
             throw new BadCredentialsException("올바르지 않은 형식의 Bearer 토큰입니다.");
         }
 
@@ -73,7 +72,6 @@ public class TokenProvider {
 
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            log.error("Jwt 파싱 에러 발생: " + e);
             return false;
         }
     }
