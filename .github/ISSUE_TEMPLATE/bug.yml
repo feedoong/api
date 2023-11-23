@@ -1,0 +1,16 @@
+name: "Bug"
+description: "버그 제보"
+labels: "Bug"
+body:
+  - type: textarea
+    attributes:
+      label: 🎙 Describe
+      description: 버그에 대한 설명을 여기에 작성해 주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🎸 기타
+      description: 기타 사항이 있다면 여기에 적어주세요.
+    validations:
+      required: false
