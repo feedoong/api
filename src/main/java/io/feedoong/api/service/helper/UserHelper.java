@@ -1,4 +1,4 @@
-package io.feedoong.api.domain.repository.helper;
+package io.feedoong.api.service.helper;
 
 import io.feedoong.api.domain.User;
 import io.feedoong.api.domain.repository.UserRepository;
