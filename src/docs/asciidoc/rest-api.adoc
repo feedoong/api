@@ -1,0 +1,15 @@
+= Feedoong REST API 문서화
+Jun(백엔드 엔지니어)
+:email: bigfanoftim@gmail.com
+:revnumber: 0.0.1
+:doctype: book
+:icons: font
+:source-highlighter: coderay
+:hardbreaks:
+:toc: left
+:toclevels: 2
+:sectlinks:
+:sectnumlevels: 3
+
+== 구독
+include::subscriptions/subscription.adoc[]
