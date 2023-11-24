@@ -1,0 +1,79 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - release
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_USER: user
+          MARIADB_PASSWORD: password
+          MARIADB_ROOT_PASSWORD: rootpassword
+          MARIADB_DATABASE: dbname
+        ports:
+          - 3306:3306
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set Environment Variables
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "ENVIRONMENT=PROD" >> $GITHUB_ENV
+            echo "BUILD_S3_BUCKET=${{ secrets.PROD_BUILD_S3_BUCKET }}" >> $GITHUB_ENV
+            echo "CODEDEPLOY_APP_NAME=${{ secrets.PROD_CODEDEPLOY_APP_NAME }}" >> $GITHUB_ENV
+            echo "DEPLOYMENT_GROUP_NAME=${{ secrets.PROD_DEPLOYMENT_GROUP_NAME }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=STAGING" >> $GITHUB_ENV
+            echo "BUILD_S3_BUCKET=${{ secrets.STAGING_BUILD_S3_BUCKET }}" >> $GITHUB_ENV
+            echo "CODEDEPLOY_APP_NAME=${{ secrets.STAGING_CODEDEPLOY_APP_NAME }}" >> $GITHUB_ENV
+            echo "DEPLOYMENT_GROUP_NAME=${{ secrets.STAGING_DEPLOYMENT_GROUP_NAME }}" >> $GITHUB_ENV
+          fi
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build
+        env:
+          TEST_FEEDOONG_DB_URL: jdbc:mariadb://localhost:3306/dbname
+          TEST_FEEDOONG_DB_USERNAME: user
+          TEST_FEEDOONG_DB_PASSWORD: password
+        run: ./gradlew build
+
+      - name: Prepare deployment bundle
+        run: |
+          mkdir deployment_bundle
+          mv build/libs/*-SNAPSHOT.jar deployment_bundle/api.jar
+          cp scripts/deploy.sh deployment_bundle/deploy.sh
+          cp appspec.yml deployment_bundle/appspec.yml
+          zip -r deployment_bundle.zip deployment_bundle/
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to S3
+        run: aws s3 cp deployment_bundle.zip s3://${{ env.BUILD_S3_BUCKET }}/deployment_bundle.zip
+
+      - name: Deploy with AWS CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.CODEDEPLOY_APP_NAME }} \
+            --deployment-group-name ${{ env.DEPLOYMENT_GROUP_NAME }} \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --s3-location bucket=${{ env.BUILD_S3_BUCKET }},key=deployment_bundle.zip,bundleType=zip
