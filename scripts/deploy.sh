@@ -26,6 +26,7 @@ fi
 
 echo "> Deploying new JAR..."
 
+source /home/ec2-user/.bashrc
 nohup java -jar /home/ec2-user/api.jar > /home/ec2-user/api.log 2>&1 &
 
 echo "> Application deployment completed."
