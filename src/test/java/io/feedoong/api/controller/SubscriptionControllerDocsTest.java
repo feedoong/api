@@ -113,14 +113,14 @@ class SubscriptionControllerDocsTest {
                                     fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재 여부"),
                                     fieldWithPath("isFirst").type(JsonFieldType.BOOLEAN).description("현재 페이지가 첫 번째 페이지인지 여부"),
                                     fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("현재 페이지가 마지막 페이지인지 여부"),
-                                    fieldWithPath("contents").type(JsonFieldType.ARRAY).description("현재 페이지의 콘텐츠 목록"),
+                                    fieldWithPath("contents").type(JsonFieldType.ARRAY).description("현재 페이지의 콘텐츠 목록 (ChannelDetailsDTO)"),
                                     fieldWithPath("contents[].id").type(JsonFieldType.NUMBER).description("채널 ID"),
                                     fieldWithPath("contents[].title").type(JsonFieldType.STRING).description("채널 제목"),
                                     fieldWithPath("contents[].description").type(JsonFieldType.STRING).description("채널 설명"),
                                     fieldWithPath("contents[].url").type(JsonFieldType.STRING).description("채널 URL"),
                                     fieldWithPath("contents[].feedUrl").type(JsonFieldType.STRING).description("피드 URL"),
                                     fieldWithPath("contents[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL"),
-                                    fieldWithPath("contents[].isSubscribed").type(JsonFieldType.BOOLEAN).description("구독 여부")
+                                    fieldWithPath("contents[].isSubscribed").type(JsonFieldType.BOOLEAN).description("구독 여부, 이 API에서 항상 true")
                             )
                     ));
         }
