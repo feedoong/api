@@ -4,7 +4,7 @@ echo "> Moving to /home/ec2-user directory"
 cd /home/ec2-user
 
 echo "> Checking for running instance"
-CURRENT_PID=$(pgrep -f "java -jar -Dspring.profiles.active=dev /home/ec2-user/api.jar")
+CURRENT_PID=$(pgrep -f "java -jar /home/ec2-user/api.jar")
 
 echo "> Currently running instance PID: $CURRENT_PID"
 
@@ -14,7 +14,7 @@ else
     echo "> Stopping the currently running application (PID: $CURRENT_PID)"
     kill -15 $CURRENT_PID
     sleep 5
-    CURRENT_PID=$(pgrep -f "java -jar -Dspring.profiles.active=dev /home/ec2-user/api.jar")
+    CURRENT_PID=$(pgrep -f "java -jar /home/ec2-user/api.jar")
     if [ -z "$CURRENT_PID" ]; then
         echo "> Application successfully stopped."
     else
