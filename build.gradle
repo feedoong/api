@@ -65,10 +65,6 @@ asciidoctor {
 
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
-    from file("build/docs/asciidoc")
+    from file("build/docs/asciidoc/rest-api.html")
     into file("src/main/resources/static/docs")
-}
-
-bootJar {
-    dependsOn copyDocument
 }
