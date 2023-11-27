@@ -22,18 +22,20 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromRequest;
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 @AutoConfigureRestDocs
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
@@ -121,6 +123,43 @@ class SubscriptionControllerDocsTest {
                                     fieldWithPath("contents[].feedUrl").type(JsonFieldType.STRING).description("피드 URL"),
                                     fieldWithPath("contents[].imageUrl").type(JsonFieldType.STRING).description("이미지 URL"),
                                     fieldWithPath("contents[].isSubscribed").type(JsonFieldType.BOOLEAN).description("구독 여부, 이 API에서 항상 true")
+                            )
+                    ));
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /v2/subscriptions/channels/{channelId} - unsubscribe 메소드")
+    class Unsubscribe {
+        private Channel channel;
+        private String token;
+
+        @BeforeEach
+        void prepare() {
+            User user = UserFactory.create();
+            userRepository.save(user);
+
+            channel = ChannelFactory.create();
+            channelRepository.save(channel);
+
+            Subscription subscription = SubscriptionFactory.create(channel, user);
+            subscriptionRepository.save(subscription);
+
+            token = tokenProvider.create(user);
+        }
+
+        @Test
+        @DisplayName("구독 취소 성공")
+        public void unsubscribeChannel_Success() throws Exception {
+            mockMvc.perform(delete("/v2/subscriptions/channels/{channelId}", channel.getId())
+                            .header("Authorization", token))
+                    .andDo(print())
+                    .andExpect(status().isNoContent())
+                    .andDo(document("subscriptions/v2/unsubscribe",
+                            fromRequest(),
+                            fromResponse(),
+                            pathParameters(
+                                    parameterWithName("channelId").description("구독을 취소할 채널의 ID")
                             )
                     ));
         }
