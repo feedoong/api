@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,5 +25,14 @@ public class SubscriptionController {
     ) {
         Page<ChannelDetailsDTO> subscribedChannels = subscriptionService.getSubscribedChannels(pageable, requestUser);
         return new PageResponse<>(subscribedChannels);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/v2/subscriptions/channels/{channelId}")
+    public void unsubscribe(
+            @AuthenticationPrincipal UserDetails requestUser,
+            @PathVariable(value = "channelId") Long channelId
+    ) {
+        subscriptionService.unsubscribe(requestUser, channelId);
     }
 }
