@@ -21,7 +21,7 @@ include::{snippets}/v2/subscriptions/response-body.adoc[]
 *DELETE* /v2/subscriptions/channels/{channelId}
 
 ==== v2 업데이트 내역
-- `/v1/subscriptions/{channelId}` -> `/v2/subscriptions/channels/{channeId}`
+- `/v1/subscriptions/{channelId}` -> `/v2/subscriptions/channels/{channelId}`
 
 ==== 요청
 - 인증을 위해 `Authorization` 헤더가 필요합니다.
