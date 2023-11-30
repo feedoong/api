@@ -46,6 +46,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Test & Create REST API Documentations
+        env:
+          TEST_FEEDOONG_DB_URL: jdbc:mariadb://localhost:3306/dbname
+          TEST_FEEDOONG_DB_USERNAME: user
+          TEST_FEEDOONG_DB_PASSWORD: password
         run: ./gradlew copyDocument
 
       - name: Build
