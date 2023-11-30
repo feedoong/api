@@ -1,0 +1,22 @@
+=== 구독한 모든 채널의 아이템 조회
+
+*GET* - /v2/items
+
+==== v2 업데이트 내역
+===== Response body 변경
+- `items` -> `contents`
+- `totalCount` -> `totalElements`
+- 이 외에 `totalPages`, `page` 등 페이징 처리를 위한 값 추가
+
+==== 요청
+- 쿼리 파라미터로 `page`, `size`, `sort`, `direction` 을 포함합니다.
+- 인증을 위해 `Authorization` 헤더가 필요합니다.
+
+include::{snippets}/v2/items/http-request.adoc[]
+include::{snippets}/v2/items/query-parameters.adoc[]
+
+==== 응답
+===== 200 OK
+
+include::{snippets}/v2/items/response-fields.adoc[]
+include::{snippets}/v2/items/response-body.adoc[]
