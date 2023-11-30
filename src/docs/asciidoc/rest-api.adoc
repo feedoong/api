@@ -13,3 +13,6 @@ Jun(백엔드 엔지니어)
 
 == 구독
 include::subscriptions/subscription.adoc[]
+
+== 아이템
+include::items/item.adoc[]

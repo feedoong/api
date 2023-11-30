@@ -17,7 +17,8 @@ public class AuthenticatedPathMatcher implements RequestMatcher {
 
     public AuthenticatedPathMatcher() {
         String[] jwtProtectedPaths = new String[]{
-                "/v2/subscriptions"
+                "/v2/subscriptions",
+                "/v2/items"
         };
 
         List<RequestMatcher> matchers = Arrays.stream(jwtProtectedPaths)
