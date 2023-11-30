@@ -1,4 +1,4 @@
-package io.feedoong.api.domain;
+package io.feedoong.api.domain.config;
 
 import jakarta.persistence.*;
 import lombok.*;

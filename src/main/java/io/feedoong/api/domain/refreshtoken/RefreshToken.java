@@ -1,5 +1,6 @@
-package io.feedoong.api.domain;
+package io.feedoong.api.domain.refreshtoken;
 
+import io.feedoong.api.domain.BaseEntity;
 import io.feedoong.api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
