@@ -1,6 +1,6 @@
 package io.feedoong.api.service;
 
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.dto.ChannelItemDTO;
 import io.feedoong.api.service.helper.ItemHelper;
 import io.feedoong.api.service.helper.UserHelper;

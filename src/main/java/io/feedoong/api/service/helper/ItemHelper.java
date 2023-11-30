@@ -1,6 +1,6 @@
 package io.feedoong.api.service.helper;
 
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.dto.ChannelItemDTO;
 import io.feedoong.api.domain.item.ItemRepository;
 import lombok.RequiredArgsConstructor;

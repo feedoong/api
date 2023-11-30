@@ -1,6 +1,6 @@
 package io.feedoong.api.shared.factory;
 
-import io.feedoong.api.domain.Channel;
+import io.feedoong.api.domain.channel.Channel;
 
 public class ChannelFactory {
     public static Channel create() {

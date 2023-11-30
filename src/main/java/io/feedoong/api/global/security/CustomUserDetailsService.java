@@ -1,6 +1,6 @@
 package io.feedoong.api.global.security;
 
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.service.helper.UserHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

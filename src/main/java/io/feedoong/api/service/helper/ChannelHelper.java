@@ -1,8 +1,8 @@
 package io.feedoong.api.service.helper;
 
-import io.feedoong.api.domain.Channel;
-import io.feedoong.api.domain.User;
-import io.feedoong.api.domain.repository.ChannelRepository;
+import io.feedoong.api.domain.channel.Channel;
+import io.feedoong.api.domain.user.User;
+import io.feedoong.api.domain.channel.ChannelRepository;
 import io.feedoong.api.global.exception.CustomException;
 import io.feedoong.api.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

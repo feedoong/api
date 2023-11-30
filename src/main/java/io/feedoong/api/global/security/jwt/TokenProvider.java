@@ -1,6 +1,6 @@
 package io.feedoong.api.global.security.jwt;
 
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

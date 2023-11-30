@@ -1,11 +1,11 @@
 package io.feedoong.api.controller;
 
-import io.feedoong.api.domain.Channel;
-import io.feedoong.api.domain.Subscription;
-import io.feedoong.api.domain.User;
-import io.feedoong.api.domain.repository.ChannelRepository;
-import io.feedoong.api.domain.repository.SubscriptionRepository;
-import io.feedoong.api.domain.repository.UserRepository;
+import io.feedoong.api.domain.channel.Channel;
+import io.feedoong.api.domain.subscription.Subscription;
+import io.feedoong.api.domain.user.User;
+import io.feedoong.api.domain.channel.ChannelRepository;
+import io.feedoong.api.domain.subscription.SubscriptionRepository;
+import io.feedoong.api.domain.user.UserRepository;
 import io.feedoong.api.global.security.jwt.TokenProvider;
 import io.feedoong.api.shared.factory.ChannelFactory;
 import io.feedoong.api.shared.factory.SubscriptionFactory;

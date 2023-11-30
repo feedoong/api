@@ -1,7 +1,7 @@
 package io.feedoong.api.shared.factory;
 
 import io.feedoong.api.domain.like.Like;
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.item.Item;
 
 public class LikeFactory {

@@ -1,7 +1,6 @@
-package io.feedoong.api.domain.repository;
+package io.feedoong.api.domain.channel;
 
-import io.feedoong.api.domain.Channel;
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

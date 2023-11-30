@@ -1,5 +1,6 @@
 package io.feedoong.api.domain;
 
+import io.feedoong.api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

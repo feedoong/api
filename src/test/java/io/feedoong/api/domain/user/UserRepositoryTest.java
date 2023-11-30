@@ -1,6 +1,7 @@
-package io.feedoong.api.domain.repository;
+package io.feedoong.api.domain.user;
 
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
+import io.feedoong.api.domain.user.UserRepository;
 import io.feedoong.api.shared.base.BaseRepositoryTest;
 import io.feedoong.api.shared.factory.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
