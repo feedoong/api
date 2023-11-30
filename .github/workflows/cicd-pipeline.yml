@@ -2,10 +2,10 @@ name: CI/CD Pipeline
 
 on:
   push:
-#    branches:
-#      - main
-#      - release
-#      - develop
+    branches:
+      - main
+      - release
+      - develop
 
 jobs:
   build-and-deploy:
