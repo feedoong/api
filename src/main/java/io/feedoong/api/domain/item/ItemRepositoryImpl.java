@@ -15,11 +15,11 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static io.feedoong.api.domain.QView.view;
 import static io.feedoong.api.domain.channel.QChannel.channel;
 import static io.feedoong.api.domain.item.QItem.item;
 import static io.feedoong.api.domain.like.QLike.like;
 import static io.feedoong.api.domain.subscription.QSubscription.subscription;
+import static io.feedoong.api.domain.view.QView.view;
 
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements CustomItemRepository {

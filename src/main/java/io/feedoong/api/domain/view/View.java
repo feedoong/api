@@ -1,5 +1,6 @@
-package io.feedoong.api.domain;
+package io.feedoong.api.domain.view;
 
+import io.feedoong.api.domain.BaseEntity;
 import io.feedoong.api.domain.item.Item;
 import io.feedoong.api.domain.user.User;
 import jakarta.persistence.*;
