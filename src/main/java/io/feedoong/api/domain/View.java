@@ -1,5 +1,6 @@
 package io.feedoong.api.domain;
 
+import io.feedoong.api.domain.item.Item;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
