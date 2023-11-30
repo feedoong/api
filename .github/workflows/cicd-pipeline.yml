@@ -2,10 +2,10 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - release
-      - develop
+#    branches:
+#      - main
+#      - release
+#      - develop
 
 jobs:
   build-and-deploy:
@@ -44,6 +44,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Test & Create REST API Documentations
+        run: ./gradlew copyDocument
 
       - name: Build
         env:
