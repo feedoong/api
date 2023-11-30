@@ -1,5 +1,8 @@
-package io.feedoong.api.domain;
+package io.feedoong.api.domain.subscription;
 
+import io.feedoong.api.domain.BaseEntity;
+import io.feedoong.api.domain.user.User;
+import io.feedoong.api.domain.channel.Channel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

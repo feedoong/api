@@ -1,8 +1,9 @@
-package io.feedoong.api.domain.repository;
+package io.feedoong.api.domain.channel;
 
-import io.feedoong.api.domain.Channel;
-import io.feedoong.api.domain.Subscription;
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.subscription.Subscription;
+import io.feedoong.api.domain.user.User;
+import io.feedoong.api.domain.subscription.SubscriptionRepository;
+import io.feedoong.api.domain.user.UserRepository;
 import io.feedoong.api.shared.base.BaseRepositoryTest;
 import io.feedoong.api.shared.factory.ChannelFactory;
 import io.feedoong.api.shared.factory.SubscriptionFactory;

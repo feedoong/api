@@ -1,6 +1,6 @@
 package io.feedoong.api.global.security.jwt;
 
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.shared.factory.UserFactory;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.io.DecodingException;

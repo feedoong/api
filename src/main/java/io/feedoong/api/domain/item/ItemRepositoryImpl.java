@@ -6,7 +6,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.dto.ChannelItemDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,11 +15,11 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static io.feedoong.api.domain.QChannel.channel;
-import static io.feedoong.api.domain.QSubscription.subscription;
 import static io.feedoong.api.domain.QView.view;
+import static io.feedoong.api.domain.channel.QChannel.channel;
 import static io.feedoong.api.domain.item.QItem.item;
 import static io.feedoong.api.domain.like.QLike.like;
+import static io.feedoong.api.domain.subscription.QSubscription.subscription;
 
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements CustomItemRepository {
@@ -59,7 +59,7 @@ public class ItemRepositoryImpl implements CustomItemRepository {
         JPAQuery<Item> countQuery = queryFactory
                 .selectFrom(item)
                 .join(item.channel, channel)
-                .join(subscription.channel, channel)
+                .join(subscription).on(subscription.channel.eq(channel).and(subscription.user.eq(user)))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset());
 

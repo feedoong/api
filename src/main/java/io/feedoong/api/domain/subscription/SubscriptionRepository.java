@@ -1,8 +1,7 @@
-package io.feedoong.api.domain.repository;
+package io.feedoong.api.domain.subscription;
 
-import io.feedoong.api.domain.Channel;
-import io.feedoong.api.domain.Subscription;
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.channel.Channel;
+import io.feedoong.api.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

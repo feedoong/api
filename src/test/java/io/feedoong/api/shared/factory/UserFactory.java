@@ -1,6 +1,6 @@
 package io.feedoong.api.shared.factory;
 
-import io.feedoong.api.domain.User;
+import io.feedoong.api.domain.user.User;
 
 public class UserFactory {
     public static User create() {

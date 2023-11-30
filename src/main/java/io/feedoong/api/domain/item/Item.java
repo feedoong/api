@@ -1,7 +1,7 @@
 package io.feedoong.api.domain.item;
 
 import io.feedoong.api.domain.BaseEntity;
-import io.feedoong.api.domain.Channel;
+import io.feedoong.api.domain.channel.Channel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package io.feedoong.api.shared.factory;
 
-import io.feedoong.api.domain.Channel;
+import io.feedoong.api.domain.channel.Channel;
 import io.feedoong.api.domain.item.Item;
 
 import java.time.LocalDateTime;
