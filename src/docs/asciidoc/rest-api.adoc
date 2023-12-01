@@ -16,3 +16,6 @@ include::subscriptions/subscription.adoc[]
 
 == 아이템
 include::items/item.adoc[]
+
+== 채널
+include::channels/channel.adoc[]
