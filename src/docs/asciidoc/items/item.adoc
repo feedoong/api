@@ -35,11 +35,11 @@ include::{snippets}/v2/items/response-body.adoc[]
 ==== 요청
 - 쿼리 파라미터로 `page`, `size`, `sort`, `direction` 을 포함합니다.
 
-include::{snippets}/v2/items/channel/channelId/login/http-request.adoc[]
-include::{snippets}/v2/items/channel/channelId/login/query-parameters.adoc[]
+include::{snippets}/v2/items/channel/channelId/http-request.adoc[]
+include::{snippets}/v2/items/channel/channelId/query-parameters.adoc[]
 
 ==== 응답
 ===== 200 OK
 
-include::{snippets}/v2/items/channel/channelId/login/response-fields.adoc[]
-include::{snippets}/v2/items/channel/channelId/login/response-body.adoc[]
+include::{snippets}/v2/items/channel/channelId/response-fields.adoc[]
+include::{snippets}/v2/items/channel/channelId/response-body.adoc[]

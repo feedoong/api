@@ -1,12 +1,12 @@
-package io.feedoong.api.controller;
+package io.feedoong.api.restdocs;
 
 import io.feedoong.api.domain.channel.Channel;
-import io.feedoong.api.domain.subscription.Subscription;
-import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.channel.ChannelRepository;
+import io.feedoong.api.domain.subscription.Subscription;
 import io.feedoong.api.domain.subscription.SubscriptionRepository;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.user.UserRepository;
-import io.feedoong.api.global.security.jwt.TokenProvider;
+import io.feedoong.api.shared.base.BaseRestDocsTest;
 import io.feedoong.api.shared.factory.ChannelFactory;
 import io.feedoong.api.shared.factory.SubscriptionFactory;
 import io.feedoong.api.shared.factory.UserFactory;
@@ -15,39 +15,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromRequest;
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
-@AutoConfigureRestDocs
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@SpringBootTest
-@DisplayName("SubscriptionController 클래스 RestDocs")
-class SubscriptionControllerDocsTest {
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private TokenProvider tokenProvider;
-
+@DisplayName("SubscriptionController REST Docs")
+class SubscriptionControllerRestDocsTest extends BaseRestDocsTest {
     @Autowired
     private UserRepository userRepository;
 
@@ -60,28 +41,24 @@ class SubscriptionControllerDocsTest {
     @Nested
     @DisplayName("GET /v2/subscriptions - getSubscriptions 메소드")
     class GetSubscriptions {
-        private Channel channel;
-        private User user;
-        private Subscription subscription;
         private String token;
 
         @BeforeEach
         void prepare() {
-            user = UserFactory.create();
+            User user = UserFactory.create();
             userRepository.save(user);
 
-            channel = ChannelFactory.create();
+            Channel channel = ChannelFactory.create();
             channelRepository.save(channel);
 
-            subscription = SubscriptionFactory.create(channel, user);
+            Subscription subscription = SubscriptionFactory.create(channel, user);
             subscriptionRepository.save(subscription);
 
             token = tokenProvider.create(user);
         }
 
         @Test
-        @DisplayName("성공 테스트")
-        public void should() throws Exception {
+        public void success() throws Exception {
             mockMvc.perform(get("/v2/subscriptions")
                             .contentType("application/json")
                             .header("Authorization", token)
@@ -90,14 +67,6 @@ class SubscriptionControllerDocsTest {
                             .param("sort", "createdAt")
                             .param("direction", "desc"))
                     .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.totalPages").value(1))
-                    .andExpect(jsonPath("$.totalElements").value(1))
-                    .andExpect(jsonPath("$.page").value(0))
-                    .andExpect(jsonPath("$.size").value(10))
-                    .andExpect(jsonPath("$.hasNext").value(false))
-                    .andExpect(jsonPath("$.isFirst").value(true))
-                    .andExpect(jsonPath("$.isLast").value(true))
                     .andDo(document("v2/subscriptions",
                             fromRequest(),
                             fromResponse(),
@@ -107,7 +76,7 @@ class SubscriptionControllerDocsTest {
                                     parameterWithName("sort").description("정렬 기준이 되는 필드 (예: 'createdAt')"),
                                     parameterWithName("direction").description("정렬 방향 (asc 또는 desc)")
                             ),
-                            PayloadDocumentation.responseFields(
+                            responseFields(
                                     fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
                                     fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
                                     fieldWithPath("page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
@@ -149,13 +118,11 @@ class SubscriptionControllerDocsTest {
         }
 
         @Test
-        @DisplayName("구독 취소 성공")
-        public void unsubscribeChannel_Success() throws Exception {
+        public void success() throws Exception {
             mockMvc.perform(delete("/v2/subscriptions/channels/{channelId}", channel.getId())
                             .header("Authorization", token))
                     .andDo(print())
-                    .andExpect(status().isNoContent())
-                    .andDo(document("subscriptions/v2/unsubscribe",
+                    .andDo(document("v2/subscriptions/channels/channelId",
                             fromRequest(),
                             fromResponse(),
                             pathParameters(

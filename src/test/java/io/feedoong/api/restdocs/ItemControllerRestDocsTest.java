@@ -1,14 +1,14 @@
-package io.feedoong.api.controller;
+package io.feedoong.api.restdocs;
 
 import io.feedoong.api.domain.channel.Channel;
-import io.feedoong.api.domain.subscription.Subscription;
-import io.feedoong.api.domain.user.User;
+import io.feedoong.api.domain.channel.ChannelRepository;
 import io.feedoong.api.domain.item.Item;
 import io.feedoong.api.domain.item.ItemRepository;
-import io.feedoong.api.domain.channel.ChannelRepository;
+import io.feedoong.api.domain.subscription.Subscription;
 import io.feedoong.api.domain.subscription.SubscriptionRepository;
+import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.user.UserRepository;
-import io.feedoong.api.global.security.jwt.TokenProvider;
+import io.feedoong.api.shared.base.BaseRestDocsTest;
 import io.feedoong.api.shared.factory.ChannelFactory;
 import io.feedoong.api.shared.factory.ItemFactory;
 import io.feedoong.api.shared.factory.SubscriptionFactory;
@@ -18,39 +18,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.restdocs.request.RequestDocumentation;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromRequest;
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
-@AutoConfigureRestDocs
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-@SpringBootTest
-@DisplayName("ItemController 클래스 REST Documentation")
-class ItemControllerDocsTest {
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private TokenProvider tokenProvider;
-
+@DisplayName("ItemController REST Docs")
+class ItemControllerRestDocsTest extends BaseRestDocsTest {
     @Autowired
     private UserRepository userRepository;
 
@@ -85,8 +66,7 @@ class ItemControllerDocsTest {
         }
 
         @Test
-        @DisplayName("아이템 조회 성공")
-        public void getItems_Success() throws Exception {
+        public void success() throws Exception {
             mockMvc.perform(get("/v2/items")
                             .header("Authorization", token)
                             .param("page", "0")
@@ -94,25 +74,16 @@ class ItemControllerDocsTest {
                             .param("sort", "publishedAt")
                             .param("direction", "desc"))
                     .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.totalPages").value(1))
-                    .andExpect(jsonPath("$.totalElements").value(1))
-                    .andExpect(jsonPath("$.page").value(0))
-                    .andExpect(jsonPath("$.size").value(10))
-                    .andExpect(jsonPath("$.hasNext").value(false))
-                    .andExpect(jsonPath("$.isFirst").value(true))
-                    .andExpect(jsonPath("$.isLast").value(true))
-                    .andExpect(jsonPath("$.contents").isArray())
                     .andDo(document("v2/items",
                             fromRequest(),
                             fromResponse(),
-                            RequestDocumentation.queryParameters(
+                            queryParameters(
                                     parameterWithName("page").description("페이지 번호 (0부터 시작)"),
                                     parameterWithName("size").description("한 페이지 당 반환되는 항목의 수"),
                                     parameterWithName("sort").description("정렬 기준이 되는 필드 (예: 'publishedAt')"),
                                     parameterWithName("direction").description("정렬 방향 (asc 또는 desc)")
                             ),
-                            PayloadDocumentation.responseFields(
+                            responseFields(
                                     fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
                                     fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
                                     fieldWithPath("page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
@@ -158,8 +129,7 @@ class ItemControllerDocsTest {
         }
 
         @Test
-        @DisplayName("로그인 사용자의 아이템 조회 성공")
-        public void getChannelItems_Success() throws Exception {
+        public void success() throws Exception {
             mockMvc.perform(get("/v2/items/channel/{channelId}", channel.getId())
                             .header("Authorization", token)
                             .param("page", "0")
@@ -167,25 +137,16 @@ class ItemControllerDocsTest {
                             .param("sort", "publishedAt")
                             .param("direction", "desc"))
                     .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.totalPages").value(1))
-                    .andExpect(jsonPath("$.totalElements").value(1))
-                    .andExpect(jsonPath("$.page").value(0))
-                    .andExpect(jsonPath("$.size").value(10))
-                    .andExpect(jsonPath("$.hasNext").value(false))
-                    .andExpect(jsonPath("$.isFirst").value(true))
-                    .andExpect(jsonPath("$.isLast").value(true))
-                    .andExpect(jsonPath("$.contents").isArray())
-                    .andDo(document("v2/items/channel/channelId/login",
+                    .andDo(document("v2/items/channel/channelId",
                             fromRequest(),
                             fromResponse(),
-                            RequestDocumentation.queryParameters(
+                            queryParameters(
                                     parameterWithName("page").description("페이지 번호 (0부터 시작)"),
                                     parameterWithName("size").description("한 페이지 당 반환되는 항목의 수"),
                                     parameterWithName("sort").description("정렬 기준이 되는 필드 (예: 'publishedAt')"),
                                     parameterWithName("direction").description("정렬 방향 (asc 또는 desc)")
                             ),
-                            PayloadDocumentation.responseFields(
+                            responseFields(
                                     fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
                                     fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
                                     fieldWithPath("page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
