@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.util.StringUtils;
 
+import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenProvider {
 
-    private final String SECRET_KEY;
+    private final SecretKey SECRET_KEY;
 
     private static final String ISSUER = "feedoong";
     private static final String BEARER_PREFIX = "Bearer ";

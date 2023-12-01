@@ -3,13 +3,15 @@ package io.feedoong.api.global.security.jwt;
 import io.feedoong.api.domain.user.User;
 import io.feedoong.api.shared.factory.UserFactory;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.io.DecodingException;
-import io.jsonwebtoken.security.WeakKeyException;
+import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.BadCredentialsException;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -18,8 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @DisplayName("TokenProvider 클래스")
 class TokenProviderTest {
 
-    final String VALID_SECRET_KEY = "UiEF7xBOSPRMCGwHlQAEk3IUlzOJWaZbRi3fpMtMNBA=";
-    final TokenProvider tokenProvider = new TokenProvider(VALID_SECRET_KEY);
+    final String SECRET_STRING = "UiEF7xBOSPRMCGwHlQAEk3IUlzOJWaZbRi3fpMtMNBA=";
+    final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET_STRING.getBytes(StandardCharsets.UTF_8));
+    final TokenProvider tokenProvider = new TokenProvider(SECRET_KEY);
 
     @Nested
     @DisplayName("create 메소드")
@@ -43,50 +46,6 @@ class TokenProviderTest {
 
                 assertThat(bearerToken).isNotNull();
                 assertThat(bearerToken).startsWith("Bearer ");
-            }
-        }
-
-        @Nested
-        @DisplayName("Key 사이즈가 너무 작으면")
-        class WithShortKey {
-
-           private User user;
-           private String shortKey;
-           private TokenProvider tokenProviderWithShortKey;
-
-           @BeforeEach
-            void prepare() {
-               shortKey = "shortKey";
-               tokenProviderWithShortKey = new TokenProvider(shortKey);
-               user = UserFactory.create();
-           }
-
-           @Test
-           @DisplayName("WeakKeyException을 던진다.")
-           public void should() throws Exception {
-               assertThatThrownBy(() -> tokenProviderWithShortKey.create(user)).isInstanceOf(WeakKeyException.class);
-           }
-        }
-
-        @Nested
-        @DisplayName("잘못된 문자(-)가 Key에 포함되어 있으면")
-        class WithInvalidKey {
-
-            private User user;
-            private String invalidKey;
-            private TokenProvider tokenProviderWithInvalidKey;
-
-            @BeforeEach
-            void prepare() {
-                invalidKey = "short-key";
-                tokenProviderWithInvalidKey = new TokenProvider(invalidKey);
-                user = UserFactory.create();
-            }
-
-            @Test
-            @DisplayName("DecodingException을 던진다.")
-            public void should() throws Exception {
-                assertThatThrownBy(() -> tokenProviderWithInvalidKey.create(user)).isInstanceOf(DecodingException.class);
             }
         }
     }
