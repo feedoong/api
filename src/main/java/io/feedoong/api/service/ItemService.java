@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -21,11 +22,13 @@ public class ItemService {
     private final ItemHelper itemHelper;
     private final ChannelHelper channelHelper;
 
+    @Transactional(readOnly = true)
     public Page<ChannelItemDTO> getItems(Pageable pageable, UserDetails requestUser) {
         User user = userHelper.getByEmail(requestUser.getUsername());
         return itemHelper.getItems(pageable, user);
     }
 
+    @Transactional(readOnly = true)
     public Page<ChannelItemDTO> getItemsByChannel(Pageable pageable, UserDetails requestUser, Long channelId) {
         Optional<User> user = getOptionalUser(requestUser);
         Channel channel = channelHelper.getChannel(channelId);

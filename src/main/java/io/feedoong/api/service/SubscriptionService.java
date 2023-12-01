@@ -26,6 +26,7 @@ public class SubscriptionService {
     private final UserHelper userHelper;
     private final SubscriptionHelper subscriptionHelper;
 
+    @Transactional(readOnly = true)
     public Page<ChannelDetailsDTO> getSubscribedChannels(Pageable pageable, UserDetails requestUser) {
         User user = userHelper.getByEmail(requestUser.getUsername());
         Page<Channel> subscribedChannels = channelHelper.getSubscribedChannels(pageable, user);
