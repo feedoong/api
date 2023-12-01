@@ -4,6 +4,8 @@ import io.feedoong.api.domain.BaseEntity;
 import io.feedoong.api.domain.item.Item;
 import io.feedoong.api.domain.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "views_user_id_item_id_unq", columnNames = {"user_id", "item_id"})

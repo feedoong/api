@@ -7,11 +7,17 @@ import io.feedoong.api.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Component
 public class UserHelper {
 
     private final UserRepository userRepository;
+
+    public Optional<User> getOptionalByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
