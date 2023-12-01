@@ -20,3 +20,26 @@ include::{snippets}/v2/items/query-parameters.adoc[]
 
 include::{snippets}/v2/items/response-fields.adoc[]
 include::{snippets}/v2/items/response-body.adoc[]
+
+=== 특정 채널의 아이템 조회
+
+*GET* - `/v2/items/channel/{channelId}`
+
+==== v2 업데이트 내역
+===== Response Body 변경
+- `channel` 데이터는 `채널 상세 정보 API` 로 분리
+- `items` -> `contents`
+- `totalCount` -> `totalElements`
+- 이 외에 `totalPages`, `page` 등 페이징 처리를 위한 값 추가
+
+==== 요청
+- 쿼리 파라미터로 `page`, `size`, `sort`, `direction` 을 포함합니다.
+
+include::{snippets}/v2/items/channel/channelId/login/http-request.adoc[]
+include::{snippets}/v2/items/channel/channelId/login/query-parameters.adoc[]
+
+==== 응답
+===== 200 OK
+
+include::{snippets}/v2/items/channel/channelId/login/response-fields.adoc[]
+include::{snippets}/v2/items/channel/channelId/login/response-body.adoc[]

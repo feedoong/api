@@ -27,9 +27,17 @@ public class ItemService {
     }
 
     public Page<ChannelItemDTO> getItemsByChannel(Pageable pageable, UserDetails requestUser, Long channelId) {
-        Optional<User> user = userHelper.getOptionalByEmail(requestUser.getUsername());
+        Optional<User> user = getOptionalUser(requestUser);
         Channel channel = channelHelper.getChannel(channelId);
 
         return itemHelper.getItemsByChannel(pageable, user, channel);
+    }
+
+    private Optional<User> getOptionalUser(UserDetails requestUser) {
+        if (requestUser != null) {
+            return userHelper.getOptionalByEmail(requestUser.getUsername());
+        } else {
+            return Optional.empty();
+        }
     }
 }
