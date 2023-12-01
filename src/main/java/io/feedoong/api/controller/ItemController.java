@@ -11,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -25,5 +26,15 @@ public class ItemController {
     ) {
         Page<ChannelItemDTO> subscribedChannelsItems = itemService.getItems(pageable, requestUser);
         return new PageResponse<>(subscribedChannelsItems);
+    }
+
+    @GetMapping("/v2/items/channel/{channelId}")
+    public PageResponse<ChannelItemDTO> getChannelItems(
+            @AuthenticationPrincipal UserDetails requestUser,
+            @PathVariable(value = "channelId") Long channelId,
+            @PageableDefault(page = 0, size = 10, sort = "publishedAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<ChannelItemDTO> channelsItems = itemService.getItemsByChannel(pageable, requestUser, channelId);
+        return new PageResponse<>(channelsItems);
     }
 }

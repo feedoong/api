@@ -9,6 +9,8 @@ import io.feedoong.api.domain.like.LikeRepository;
 import io.feedoong.api.domain.channel.ChannelRepository;
 import io.feedoong.api.domain.subscription.SubscriptionRepository;
 import io.feedoong.api.domain.user.UserRepository;
+import io.feedoong.api.domain.view.View;
+import io.feedoong.api.domain.view.ViewRepository;
 import io.feedoong.api.shared.base.BaseRepositoryTest;
 import io.feedoong.api.shared.factory.*;
 import org.junit.jupiter.api.*;
@@ -17,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -37,6 +41,9 @@ class CustomItemRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     private LikeRepository likeRepository;
+
+    @Autowired
+    private ViewRepository viewRepository;
 
     @Nested
     @DisplayName("findChannelItemByUser 메소드")
@@ -140,6 +147,91 @@ class CustomItemRepositoryTest extends BaseRepositoryTest {
             public void shouldReturn_EmptyPage() throws Exception {
                 Page<ChannelItemDTO> result = itemRepository.findChannelItemByUser(pageable, user);
                 assertThat(result).isEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findChannelItemsByChannel 메소드")
+    class FindChannelItemsByChannel {
+        private Pageable pageable;
+        private Channel channel;
+        private Item item;
+
+        @BeforeEach
+        void prepare() {
+            pageable = PageRequest.of(0, 10, Sort.by("publishedAt").ascending());
+
+            channel = ChannelFactory.create();
+            channelRepository.save(channel);
+
+            item = ItemFactory.create(channel);
+            itemRepository.save(item);
+        }
+
+        @Nested
+        @DisplayName("로그인하지 않은 사용자가 조회하면")
+        class AnonymousUser {
+            private Optional<User> anonymousUser;
+
+            @BeforeEach
+            void prepare() {
+                anonymousUser = Optional.empty();
+            }
+
+            @Test
+            @DisplayName("좋아요, 조회 여부가 전부 false인 아이템을 포함한 Page 객체를 리턴한다.")
+            public void should() throws Exception {
+                Page<ChannelItemDTO> result = itemRepository.findChannelItemsByChannel(pageable, anonymousUser, channel);
+
+                assertAll("Page 객체 검증",
+                        () -> assertThat(result).isNotEmpty().as("결과는 비어있지 않아야 한다"),
+                        () -> assertThat(result.getTotalPages()).as("총 페이지 수는 1이어야 한다").isEqualTo(1),
+                        () -> assertThat(result.getTotalElements()).as("총 요소 수는 1이어야 한다").isEqualTo(1),
+                        () -> assertThat(result.getNumber()).as("페이지 번호는 0이어야 한다").isEqualTo(0),
+                        () -> assertThat(result.getSize()).as("페이지 크기는 10이어야 한다").isEqualTo(10)
+                );
+                assertAll("Content 검증",
+                        () -> assertThat(result.getContent().get(0).getIsLiked()).isFalse().as("좋아요 데이터가 거짓이어야 한다"),
+                        () -> assertThat(result.getContent().get(0).getIsViewed()).isFalse().as("조회 데이터가 거짓이어야 한다")
+                );
+            }
+        }
+
+        @Nested
+        @DisplayName("로그인한 사용자가 조회하면")
+        class LoggedInUser {
+            private Optional<User> loggedInUser;
+
+            @BeforeEach
+            void prepare() {
+                User user = UserFactory.create();
+                userRepository.save(user);
+                loggedInUser = Optional.of(user);
+
+                Like like = LikeFactory.create(user, item);
+                likeRepository.save(like);
+
+                View view = ViewFactory.create(user, item);
+                viewRepository.save(view);
+            }
+
+            @Test
+            @DisplayName("정상적으로 좋아요, 조회 여부가 담긴 아이템을 포함한 Page 객체를 리턴한다.")
+            public void should() throws Exception {
+                Page<ChannelItemDTO> result = itemRepository.findChannelItemsByChannel(pageable, loggedInUser, channel);
+
+                assertAll("Page 객체 검증",
+                        () -> assertThat(result).isNotEmpty().as("결과는 비어있지 않아야 한다"),
+                        () -> assertThat(result.getTotalPages()).as("총 페이지 수는 1이어야 한다").isEqualTo(1),
+                        () -> assertThat(result.getTotalElements()).as("총 요소 수는 1이어야 한다").isEqualTo(1),
+                        () -> assertThat(result.getNumber()).as("페이지 번호는 0이어야 한다").isEqualTo(0),
+                        () -> assertThat(result.getSize()).as("페이지 크기는 10이어야 한다").isEqualTo(10)
+                );
+                assertAll("Content 검증",
+                        () -> assertThat(result.getContent().get(0).getIsLiked()).isTrue().as("좋아요 데이터가 거짓이어야 한다"),
+                        () -> assertThat(result.getContent().get(0).getIsViewed()).isTrue().as("조회 데이터가 거짓이어야 한다")
+                );
             }
         }
     }
