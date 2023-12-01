@@ -3,7 +3,7 @@ package io.feedoong.api.service;
 import io.feedoong.api.domain.channel.Channel;
 import io.feedoong.api.domain.subscription.Subscription;
 import io.feedoong.api.domain.user.User;
-import io.feedoong.api.service.dto.ChannelDetailsDTO;
+import io.feedoong.api.domain.channel.dto.ChannelDetailsDTO;
 import io.feedoong.api.service.helper.ChannelHelper;
 import io.feedoong.api.service.helper.SubscriptionHelper;
 import io.feedoong.api.service.helper.UserHelper;

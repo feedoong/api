@@ -2,7 +2,7 @@ package io.feedoong.api.controller;
 
 import io.feedoong.api.controller.response.PageResponse;
 import io.feedoong.api.service.SubscriptionService;
-import io.feedoong.api.service.dto.ChannelDetailsDTO;
+import io.feedoong.api.domain.channel.dto.ChannelDetailsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

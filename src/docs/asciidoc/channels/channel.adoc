@@ -1,0 +1,12 @@
+=== 특정 채널 조회
+
+*GET* - `/v2/channels/{channelId}`
+
+==== 요청
+include::{snippets}/v2/channels/channelId/login/http-request.adoc[]
+
+==== 응답
+===== 200 OK
+
+include::{snippets}/v2/channels/channelId/login/response-fields.adoc[]
+include::{snippets}/v2/channels/channelId/login/response-body.adoc[]
