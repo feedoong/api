@@ -3,7 +3,7 @@ package io.feedoong.api.restdocs;
 import io.feedoong.api.controller.ChannelController;
 import io.feedoong.api.domain.channel.dto.ChannelDetailsDTO;
 import io.feedoong.api.service.ChannelService;
-import io.feedoong.api.shared.mock.ChannelMock;
+import io.feedoong.api.shared.factory.ChannelFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ class ChannelControllerRestDocsTest {
     @WithMockUser
     @DisplayName("GET /v2/channels/{channelId} -  getChannelDetails")
     public void getChannelDetails() throws Exception {
-        ChannelDetailsDTO channelDetails = ChannelMock.channelDetailsDTO();
+        ChannelDetailsDTO channelDetails = ChannelFactory.mockChannelDetailsDTO();
         when(channelService.getChannelDetails(anyLong(), any(UserDetails.class)))
                 .thenReturn(channelDetails);
 
