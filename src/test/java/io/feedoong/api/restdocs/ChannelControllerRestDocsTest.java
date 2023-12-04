@@ -3,20 +3,15 @@ package io.feedoong.api.restdocs;
 import io.feedoong.api.controller.ChannelController;
 import io.feedoong.api.domain.channel.dto.ChannelDetailsDTO;
 import io.feedoong.api.service.ChannelService;
+import io.feedoong.api.shared.base.BaseRestDocsTest;
 import io.feedoong.api.shared.factory.ChannelFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromRequest;
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromResponse;
@@ -29,27 +24,21 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@AutoConfigureRestDocs
-@EnableWebSecurity
 @WebMvcTest(ChannelController.class)
-@ActiveProfiles("test")
 @DisplayName("ChannelController REST Docs")
-class ChannelControllerRestDocsTest {
-    @Autowired
-    private MockMvc mockMvc;
-
+class ChannelControllerRestDocsTest extends BaseRestDocsTest {
     @MockBean
     private ChannelService channelService;
 
     @Test
-    @WithMockUser
     @DisplayName("GET /v2/channels/{channelId} -  getChannelDetails")
     public void getChannelDetails() throws Exception {
         ChannelDetailsDTO channelDetails = ChannelFactory.mockChannelDetailsDTO();
         when(channelService.getChannelDetails(anyLong(), any(UserDetails.class)))
                 .thenReturn(channelDetails);
 
-        mockMvc.perform(get("/v2/channels/{channelId}", channelDetails.getId()))
+        mockMvc.perform(get("/v2/channels/{channelId}", channelDetails.getId())
+                        .header("Authorization", bearerToken))
                 .andDo(print())
                 .andExpect(jsonPath("$.data.id").value(channelDetails.getId()))
                 .andExpect(jsonPath("$.data.title").value(channelDetails.getTitle()))

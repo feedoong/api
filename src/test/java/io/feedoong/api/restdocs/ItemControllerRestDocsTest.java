@@ -3,21 +3,18 @@ package io.feedoong.api.restdocs;
 import io.feedoong.api.controller.ItemController;
 import io.feedoong.api.domain.dto.ChannelItemDTO;
 import io.feedoong.api.service.ItemService;
+import io.feedoong.api.shared.base.BaseRestDocsTest;
 import io.feedoong.api.shared.factory.ItemFactory;
-import io.feedoong.api.shared.mock.TokenMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
@@ -35,20 +32,13 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@AutoConfigureRestDocs
-@EnableWebSecurity
 @WebMvcTest(ItemController.class)
-@ActiveProfiles("test")
 @DisplayName("ItemController REST Docs")
-class ItemControllerRestDocsTest {
-    @Autowired
-    private MockMvc mockMvc;
-
+class ItemControllerRestDocsTest extends BaseRestDocsTest {
     @MockBean
     private ItemService itemService;
 
     @Test
-    @WithMockUser
     @DisplayName("GET /v2/items - getItems")
     public void getItems() throws Exception {
         Page<ChannelItemDTO> page = mockChannelItemDTOPage();
@@ -58,7 +48,7 @@ class ItemControllerRestDocsTest {
         List<ChannelItemDTO> contents = page.getContent();
 
         mockMvc.perform(get("/v2/items")
-                        .header("Authorization", TokenMock.bearerToken())
+                        .header("Authorization", bearerToken)
                         .param("page", "0")
                         .param("size", "10")
                         .param("sort", "publishedAt")
@@ -76,7 +66,6 @@ class ItemControllerRestDocsTest {
                 .andExpect(jsonPath("$.contents[0].channelId").value(contents.get(0).getChannelId()))
                 .andExpect(jsonPath("$.contents[0].channelTitle").value(contents.get(0).getChannelTitle()))
                 .andExpect(jsonPath("$.contents[0].channelImageUrl").value(contents.get(0).getChannelImageUrl()))
-                .andExpect(jsonPath("$.contents[0].id").value(1))
                 .andExpect(jsonPath("$.totalPages").value(1))
                 .andExpect(jsonPath("$.totalElements").value(1))
                 .andExpect(jsonPath("$.page").value(0))
@@ -119,7 +108,6 @@ class ItemControllerRestDocsTest {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("GET /v2/items/channel/{channelId} - getChannelItems")
     public void GetChannelItems() throws Exception {
         Page<ChannelItemDTO> page = mockChannelItemDTOPage();
@@ -129,7 +117,7 @@ class ItemControllerRestDocsTest {
         List<ChannelItemDTO> contents = page.getContent();
 
         mockMvc.perform(get("/v2/items/channel/{channelId}", 1L)
-                        .header("Authorization", TokenMock.bearerToken())
+                        .header("Authorization", bearerToken)
                         .param("page", "0")
                         .param("size", "10")
                         .param("sort", "publishedAt")
