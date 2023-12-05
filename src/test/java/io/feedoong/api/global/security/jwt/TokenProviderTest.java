@@ -40,12 +40,11 @@ class TokenProviderTest {
             }
 
             @Test
-            @DisplayName("올바른 형식의 Bearer Token을 리턴한다.")
+            @DisplayName("올바른 형식의 JWT Token을 리턴한다.")
             public void should() throws Exception {
                 String bearerToken = tokenProvider.create(user);
 
                 assertThat(bearerToken).isNotNull();
-                assertThat(bearerToken).startsWith("Bearer ");
             }
         }
     }
@@ -106,8 +105,7 @@ class TokenProviderTest {
             @BeforeEach
             void setUp() {
                 User user = UserFactory.create();
-                String bearerToken = tokenProvider.create(user);
-                validJwtToken = tokenProvider.parseBearerToken(bearerToken);
+                validJwtToken = tokenProvider.create(user);
             }
 
             @Test
@@ -150,8 +148,7 @@ class TokenProviderTest {
             @BeforeEach
             void setUp() {
                 user = UserFactory.create();
-                String bearerToken = tokenProvider.create(user);
-                validJwtToken = tokenProvider.parseBearerToken(bearerToken);
+                validJwtToken = tokenProvider.create(user);
             }
 
             @Test
