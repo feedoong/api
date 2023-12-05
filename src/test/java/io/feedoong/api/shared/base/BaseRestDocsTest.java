@@ -35,7 +35,8 @@ public abstract class BaseRestDocsTest {
     @PostConstruct
     private void set() {
         User user = UserFactory.create();
-        bearerToken = tokenProvider.create(user);
+        String jwtToken = tokenProvider.create(user);
+        bearerToken = tokenProvider.getBearerPrefix() + jwtToken;
 
         when(userDetailsService.loadUserByUsername(anyString()))
                 .thenReturn(new CustomUserDetails(user));

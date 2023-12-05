@@ -30,15 +30,13 @@ public class TokenProvider {
         Date issuedAt = new Date();
         Date expiryDate = getExpiryDate(EXPIRY_AMOUNT, EXPIRY_UNIT);
 
-        String bearerToken = Jwts.builder()
+        return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .setSubject(subject)
                 .setIssuer(ISSUER)
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiryDate)
                 .compact();
-
-        return BEARER_PREFIX + bearerToken;
     }
 
     public String parseBearerToken(String bearerToken) {
@@ -62,6 +60,10 @@ public class TokenProvider {
                 .parseClaimsJws(jwtToken)
                 .getBody()
                 .getSubject();
+    }
+
+    public String getBearerPrefix() {
+        return BEARER_PREFIX;
     }
 
     private boolean isValid(String jwtToken) {
