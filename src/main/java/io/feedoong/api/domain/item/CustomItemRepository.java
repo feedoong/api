@@ -12,4 +12,6 @@ public interface CustomItemRepository {
     Page<ChannelItemDTO> findChannelItemByUser(Pageable pageable, User user);
 
     Page<ChannelItemDTO> findChannelItemsByChannel(Pageable pageable, Optional<User> user, Channel channel);
+
+    Page<ChannelItemDTO> findLikedChannelItems(Pageable pageable, User user);
 }

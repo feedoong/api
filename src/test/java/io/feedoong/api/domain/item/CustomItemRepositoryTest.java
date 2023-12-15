@@ -20,10 +20,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("CustomItemRepository 인터페이스")
 class CustomItemRepositoryTest extends BaseRepositoryTest {
@@ -232,6 +234,137 @@ class CustomItemRepositoryTest extends BaseRepositoryTest {
                         () -> assertThat(result.getContent().get(0).getIsLiked()).isTrue().as("좋아요 데이터가 거짓이어야 한다"),
                         () -> assertThat(result.getContent().get(0).getIsViewed()).isTrue().as("조회 데이터가 거짓이어야 한다")
                 );
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findLikedChannelItems 메소드")
+    class FindLikedChannelItems {
+        @Nested
+        @DisplayName("좋아요하지 않은 아이템만 존재하면")
+        class WithNotLikedItems {
+            private User user;
+            private Pageable pageable;
+
+            @BeforeEach
+            void prepare() {
+                Channel channel = ChannelFactory.create();
+                channelRepository.save(channel);
+
+                Item item = ItemFactory.create(channel);
+                itemRepository.save(item);
+
+                user = UserFactory.create();
+                userRepository.save(user);
+
+                pageable = PageRequest.of(0, 10, Sort.by("publishedAt").ascending());
+            }
+
+            @Test
+            @DisplayName("빈 Page 객체를 리턴한다.")
+            public void shouldReturn_Empty_PageObject() throws Exception {
+                Page<ChannelItemDTO> result = itemRepository.findLikedChannelItems(pageable, user);
+
+                assertThat(result.getContent()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("좋아요한 아이템이 존재하면")
+        class WithLikedItem {
+            private User user;
+            private Pageable pageable;
+
+            @BeforeEach
+            void prepare() {
+                Channel channel = ChannelFactory.create();
+                channelRepository.save(channel);
+
+                Item item = ItemFactory.create(channel);
+                itemRepository.save(item);
+
+                user = UserFactory.create();
+                userRepository.save(user);
+
+                Like like = LikeFactory.create(user, item);
+                likeRepository.save(like);
+
+                pageable = PageRequest.of(0, 10, Sort.by("publishedAt").ascending());
+            }
+
+            @Test
+            @DisplayName("아이템을 content로 담고 있는 Page 객체를 성공적으로 리턴한다.")
+            public void shouldReturn_PageObject_Successfully() throws Exception {
+                Page<ChannelItemDTO> result = itemRepository.findLikedChannelItems(pageable, user);
+
+                assertAll("Page 객체 검증",
+                        () -> assertThat(result).isNotEmpty().as("결과는 비어있지 않아야 한다"),
+                        () -> assertThat(result.getTotalPages()).as("총 페이지 수는 1이어야 한다").isEqualTo(1),
+                        () -> assertThat(result.getTotalElements()).as("총 요소 수는 1이어야 한다").isEqualTo(1),
+                        () -> assertThat(result.getNumber()).as("페이지 번호는 0이어야 한다").isEqualTo(0),
+                        () -> assertThat(result.getSize()).as("페이지 크기는 10이어야 한다").isEqualTo(10),
+                        () -> assertThat(result.isFirst() && result.isLast()).as("해당 페이지가 처음이자 마지막이어야 한다").isTrue()
+                );
+                assertAll("Content 검증",
+                        () -> assertThat(result.getContent().get(0).getIsLiked()).isTrue().as("좋아요 데이터가 참이어야 한다"),
+                        () -> assertThat(result.getContent().get(0).getIsViewed()).isFalse().as("조회 데이터가 거짓이어야 한다")
+                );
+            }
+        }
+
+        @Nested
+        @DisplayName("좋아요한 아이템이 10개 존재하며")
+        class WithLikedItems {
+            private User user;
+
+            @BeforeEach
+            void prepare() {
+                Channel channel = ChannelFactory.create();
+                channelRepository.save(channel);
+
+                user = UserFactory.create();
+                userRepository.save(user);
+
+                List<Item> items = ItemFactory.createItems(channel);
+                itemRepository.saveAll(items);
+
+                List<Like> likes = LikeFactory.createLikes(user, items);
+                likeRepository.saveAll(likes);
+
+            }
+
+            @Nested
+            @DisplayName("pageNumber 0, pageSize 5로 좋아요한 아이템을 조회하면")
+            class WithPageNumber0AndPageSize5 {
+                private Pageable pageable;
+
+                @BeforeEach
+                void prepare() {
+                    pageable = PageRequest.of(0, 5, Sort.by("publishedAt").ascending());
+                }
+
+                @Test
+                @DisplayName("총 요소 수는 10개, 조회된 아이템은 5개, 첫 페이지가 성공적으로 조회된다.")
+                public void shouldReturn_PageObject_With_10_TotalElements() throws Exception {
+                    Page<ChannelItemDTO> result = itemRepository.findLikedChannelItems(pageable, user);
+
+                    assertAll("Page 객체 검증",
+                            () -> assertThat(result).isNotEmpty().as("결과는 비어있지 않아야 한다"),
+                            () -> assertThat(result.getTotalPages()).as("총 페이지 수는 2이어야 한다").isEqualTo(2),
+                            () -> assertThat(result.getTotalElements()).as("총 요소 수는 10이어야 한다").isEqualTo(10),
+                            () -> assertThat(result.getNumber()).as("페이지 번호는 0이어야 한다").isEqualTo(0),
+                            () -> assertThat(result.getSize()).as("페이지 크기는 5이어야 한다").isEqualTo(5),
+                            () -> assertThat(result.isFirst()).as("해당 페이지가 처음이어야 한다").isTrue(),
+                            () -> assertThat(result.isLast()).as("해당 페이지가 마지막이 아니어야 한다").isFalse()
+                    );
+                    assertAll("Content 검증",
+                            () -> result.getContent().stream()
+                                    .map(item -> assertThat(item.getIsLiked()).isTrue().as("좋아요 데이터가 참이어야 한다.")),
+                            () -> result.getContent().stream()
+                                    .map(item -> assertThat(item.getIsViewed()).isFalse().as("조회 데이터가 거짓이어야 한다."))
+                    );
+                }
             }
         }
     }

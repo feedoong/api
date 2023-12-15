@@ -23,4 +23,8 @@ public class ItemHelper {
     public Page<ChannelItemDTO> getItemsByChannel(Pageable pageable, Optional<User> user, Channel channel) {
         return itemRepository.findChannelItemsByChannel(pageable, user, channel);
     }
+
+    public Page<ChannelItemDTO> findLikedItems(Pageable pageable, User user) {
+        return itemRepository.findLikedChannelItems(pageable, user);
+    }
 }

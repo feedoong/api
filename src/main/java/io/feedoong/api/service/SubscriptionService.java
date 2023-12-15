@@ -28,7 +28,7 @@ public class SubscriptionService {
 
     @Transactional(readOnly = true)
     public Page<ChannelDetailsDTO> getSubscribedChannels(Pageable pageable, UserDetails requestUser) {
-        User user = userHelper.getByEmail(requestUser.getUsername());
+        User user = userHelper.findByEmail(requestUser.getUsername());
         Page<Channel> subscribedChannels = channelHelper.getSubscribedChannels(pageable, user);
         boolean isSubscribed = true;
         List<ChannelDetailsDTO> channelDetailsDTOList = subscribedChannels.stream()
@@ -39,7 +39,7 @@ public class SubscriptionService {
 
     @Transactional
     public void unsubscribe(UserDetails requestUser, Long channelId) {
-        User user = userHelper.getByEmail(requestUser.getUsername());
+        User user = userHelper.findByEmail(requestUser.getUsername());
         Channel channel = channelHelper.getChannel(channelId);
         Subscription subscription = subscriptionHelper.getSubscription(user, channel);
         subscriptionHelper.delete(subscription);

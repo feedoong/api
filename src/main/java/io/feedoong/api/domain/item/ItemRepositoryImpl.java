@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.feedoong.api.domain.channel.Channel;
 import io.feedoong.api.domain.dto.ChannelItemDTO;
+import io.feedoong.api.domain.like.QLike;
 import io.feedoong.api.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -82,6 +83,35 @@ public class ItemRepositoryImpl implements CustomItemRepository {
         JPAQuery<Item> countQuery = queryFactory
                 .selectFrom(item)
                 .join(item.channel, channel).on(channel.eq(channelEntity));
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<ChannelItemDTO> findLikedChannelItems(Pageable pageable, User user) {
+        List<ChannelItemDTO> contents = queryFactory
+                .select(constructor(ChannelItemDTO.class,
+                        item.id,
+                        item.title,
+                        item.description,
+                        item.link,
+                        item.guid,
+                        item.publishedAt,
+                        item.imageUrl,
+                        asBoolean(true).as("isLiked"),
+                        asBoolean(isViewedExp(user)).as("isViewed"),
+                        channel.id,
+                        channel.title,
+                        channel.imageUrl))
+                .from(item)
+                .join(item.channel, channel)
+                .join(like).on(like.user.eq(user).and(like.item.eq(item)))
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
+        JPAQuery<Item> countQuery = queryFactory
+                .selectFrom(item)
+                .join(item.channel, channel);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchCount);
     }
