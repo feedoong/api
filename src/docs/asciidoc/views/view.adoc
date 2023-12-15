@@ -1,0 +1,22 @@
+=== 조회 생성 - 아이템 읽음 처리
+
+*POST* - `/v2/views/items/{itemId}`
+
+==== v2 업데이트 내역
+====
+엔드포인트 주소 변경
+
+- `/v1/items/view/{itemId}` -> `/v2/views/item/{itemId}`
+====
+
+==== 요청
+- 인증을 위해 `Authorization` 헤더가 필요합니다.
+
+include::{snippets}/v2/views/item/itemId/http-request.adoc[]
+include::{snippets}/v2/views/item/itemId/path-parameters.adoc[]
+
+==== 응답
+===== 200 OK
+
+include::{snippets}/v2/views/item/itemId/response-fields.adoc[]
+include::{snippets}/v2/views/item/itemId/response-body.adoc[]

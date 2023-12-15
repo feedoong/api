@@ -2,7 +2,7 @@ package io.feedoong.api.domain.item;
 
 import io.feedoong.api.domain.channel.Channel;
 import io.feedoong.api.domain.user.User;
-import io.feedoong.api.domain.dto.ChannelItemDTO;
+import io.feedoong.api.domain.item.dto.ChannelItemDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

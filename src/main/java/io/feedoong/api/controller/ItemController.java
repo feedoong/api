@@ -1,7 +1,7 @@
 package io.feedoong.api.controller;
 
 import io.feedoong.api.controller.response.PageResponse;
-import io.feedoong.api.domain.dto.ChannelItemDTO;
+import io.feedoong.api.domain.item.dto.ChannelItemDTO;
 import io.feedoong.api.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

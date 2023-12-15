@@ -1,7 +1,7 @@
 = Feedoong REST API 문서화
 Jun(백엔드 엔지니어)
 :email: bigfanoftim@gmail.com
-:revnumber: 0.0.1
+:revnumber: 2.0.0
 :doctype: book
 :icons: font
 :source-highlighter: coderay
@@ -19,3 +19,6 @@ include::items/item.adoc[]
 
 == 채널
 include::channels/channel.adoc[]
+
+== 조회
+include::views/view.adoc[]

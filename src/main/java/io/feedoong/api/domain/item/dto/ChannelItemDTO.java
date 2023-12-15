@@ -1,4 +1,4 @@
-package io.feedoong.api.domain.dto;
+package io.feedoong.api.domain.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -4,7 +4,7 @@ import io.feedoong.api.domain.channel.Channel;
 import io.feedoong.api.domain.like.Like;
 import io.feedoong.api.domain.subscription.Subscription;
 import io.feedoong.api.domain.user.User;
-import io.feedoong.api.domain.dto.ChannelItemDTO;
+import io.feedoong.api.domain.item.dto.ChannelItemDTO;
 import io.feedoong.api.domain.like.LikeRepository;
 import io.feedoong.api.domain.channel.ChannelRepository;
 import io.feedoong.api.domain.subscription.SubscriptionRepository;
