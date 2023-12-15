@@ -1,7 +1,7 @@
 package io.feedoong.api.restdocs;
 
 import io.feedoong.api.controller.ItemController;
-import io.feedoong.api.domain.dto.ChannelItemDTO;
+import io.feedoong.api.domain.item.dto.ChannelItemDTO;
 import io.feedoong.api.service.ItemService;
 import io.feedoong.api.shared.base.BaseRestDocsTest;
 import io.feedoong.api.shared.factory.ItemFactory;
