@@ -24,7 +24,7 @@ public class ItemService {
 
     @Transactional(readOnly = true)
     public Page<ChannelItemDTO> getItems(Pageable pageable, UserDetails requestUser) {
-        User user = userHelper.getByEmail(requestUser.getUsername());
+        User user = userHelper.findByEmail(requestUser.getUsername());
         return itemHelper.getItems(pageable, user);
     }
 
@@ -34,6 +34,13 @@ public class ItemService {
         Channel channel = channelHelper.getChannel(channelId);
 
         return itemHelper.getItemsByChannel(pageable, user, channel);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ChannelItemDTO> findLikedItems(Pageable pageable, UserDetails requestUser) {
+        User user = userHelper.findByEmail(requestUser.getUsername());
+
+        return itemHelper.findLikedItems(pageable, user);
     }
 
     private Optional<User> getOptionalUser(UserDetails requestUser) {

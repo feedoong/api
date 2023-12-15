@@ -5,6 +5,7 @@ import io.feedoong.api.domain.dto.ChannelItemDTO;
 import io.feedoong.api.domain.item.Item;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemFactory {
@@ -18,6 +19,25 @@ public class ItemFactory {
                 .imageUrl("https://feedoong.io/img.png")
                 .channel(channel)
                 .build();
+    }
+
+    public static List<Item> createItems(Channel channel) {
+        List<Item> items = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Item item = Item.builder()
+                    .title("title" + i)
+                    .description("description" + i)
+                    .link("link" + i + ".com")
+                    .guid("https://feedoong.io/" + i)
+                    .publishedAt(LocalDateTime.of(2023, 1, 1, 10, 00, 00))
+                    .imageUrl("https://feedoong.io/" + i + ".png")
+                    .channel(channel)
+                    .build();
+            items.add(item);
+        }
+
+        return items;
     }
 
     public static List<ChannelItemDTO> mockChannelItemDTOs() {

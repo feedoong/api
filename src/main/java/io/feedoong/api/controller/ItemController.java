@@ -37,4 +37,13 @@ public class ItemController {
         Page<ChannelItemDTO> channelsItems = itemService.getItemsByChannel(pageable, requestUser, channelId);
         return new PageResponse<>(channelsItems);
     }
+
+    @GetMapping("/v2/items/liked")
+    public PageResponse<ChannelItemDTO> findLikedItems(
+            @AuthenticationPrincipal UserDetails requestUser,
+            @PageableDefault(page = 0, size = 10, sort = "publishedAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<ChannelItemDTO> likedItems = itemService.findLikedItems(pageable, requestUser);
+        return new PageResponse<>(likedItems);
+    }
 }

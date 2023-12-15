@@ -28,8 +28,8 @@ class UserHelperTest extends BaseHelperTest {
     private UserHelper userHelper;
 
     @Nested
-    @DisplayName("getUserByEmail 메소드")
-    class GetUserByEmail {
+    @DisplayName("findByEmail 메소드")
+    class FindByEmail {
 
         @Nested
         @DisplayName("email에 해당하는 user가 존재하지 않으면")
@@ -46,7 +46,7 @@ class UserHelperTest extends BaseHelperTest {
             @Test
             @DisplayName("USER_NOT_FOUND CustomException을 던진다.")
             public void shouldThrow_USER_NOT_FOUND_CustomException() throws Exception {
-                assertThrowsCustomException(() -> userHelper.getByEmail(email)).with(ErrorCode.USER_NOT_FOUND);
+                assertThrowsCustomException(() -> userHelper.findByEmail(email)).with(ErrorCode.USER_NOT_FOUND);
             }
         }
 
@@ -67,7 +67,7 @@ class UserHelperTest extends BaseHelperTest {
             @Test
             @DisplayName("조회된 User를 리턴한다.")
             public void shouldReturn_User() throws Exception {
-                User result = userHelper.getByEmail(email);
+                User result = userHelper.findByEmail(email);
 
                 assertThat(result).usingRecursiveComparison().isEqualTo(user);
             }

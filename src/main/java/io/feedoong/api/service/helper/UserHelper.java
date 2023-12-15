@@ -19,7 +19,7 @@ public class UserHelper {
         return userRepository.findByEmail(email);
     }
 
-    public User getByEmail(String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }

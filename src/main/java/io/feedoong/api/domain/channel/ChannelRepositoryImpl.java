@@ -5,8 +5,10 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.feedoong.api.domain.channel.dto.ChannelDetailsDTO;
+import io.feedoong.api.domain.dto.ChannelItemDTO;
 import io.feedoong.api.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.Optional;
 
