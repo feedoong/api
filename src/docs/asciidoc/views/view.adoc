@@ -1,6 +1,6 @@
 === 조회 생성 - 아이템 읽음 처리
 
-*POST* - `/v2/views/items/{itemId}`
+*POST* - `/v2/views/item/{itemId}`
 
 ==== v2 업데이트 내역
 ====
