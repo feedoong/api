@@ -20,3 +20,30 @@ include::{snippets}/v2/likes/item/itemId/path-parameters.adoc[]
 
 include::{snippets}/v2/likes/item/itemId/response-fields.adoc[]
 include::{snippets}/v2/likes/item/itemId/response-body.adoc[]
+
+=== 아이템 보관(좋아요) 취소
+
+*DELETE* - `/v2/likes/item/{itemId}`
+
+==== v2 업데이트 내역
+====
+엔드포인트 주소 변경
+
+- `/v1/likes/{itemId}` -> `/v2/likes/item/{itemId}`
+====
+====
+Response Status 변경
+
+- `200 OK` -> `204 No Content`
+====
+
+==== 요청
+- 인증을 위해 `Authorization` 헤더가 필요합니다.
+
+include::{snippets}/v2/likes/unlike/http-request.adoc[]
+include::{snippets}/v2/likes/unlike/path-parameters.adoc[]
+
+==== 응답
+===== 204 No Content
+
+include::{snippets}/v2/likes/unlike/http-response.adoc[]
