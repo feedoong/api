@@ -22,3 +22,6 @@ include::channels/channel.adoc[]
 
 == 조회
 include::views/view.adoc[]
+
+== 보관(좋아요)
+include::likes/like.adoc[]

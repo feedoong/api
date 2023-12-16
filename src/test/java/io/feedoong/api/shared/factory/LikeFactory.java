@@ -3,6 +3,7 @@ package io.feedoong.api.shared.factory;
 import io.feedoong.api.domain.like.Like;
 import io.feedoong.api.domain.user.User;
 import io.feedoong.api.domain.item.Item;
+import io.feedoong.api.service.dto.LikeItemDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,5 +24,12 @@ public class LikeFactory {
                         .item(item)
                         .build())
                 .toList();
+    }
+
+    public static LikeItemDTO createLikeItemDTO() {
+        return LikeItemDTO.builder()
+                .itemId(1L)
+                .isLiked(true)
+                .build();
     }
 }

@@ -35,4 +35,11 @@ public class Like {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public static Like of(User user, Item item) {
+        return Like.builder()
+                .user(user)
+                .item(item)
+                .build();
+    }
 }
