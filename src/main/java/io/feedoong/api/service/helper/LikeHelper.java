@@ -4,6 +4,8 @@ import io.feedoong.api.domain.item.Item;
 import io.feedoong.api.domain.like.Like;
 import io.feedoong.api.domain.like.LikeRepository;
 import io.feedoong.api.domain.user.User;
+import io.feedoong.api.global.exception.CustomException;
+import io.feedoong.api.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,16 @@ public class LikeHelper {
         return likeRepository.save(like);
     }
 
-    public Optional<Like> findByUserAndItem(User user, Item item) {
+    public void delete(Like like) {
+        likeRepository.delete(like);
+    }
+
+    public Like findOne(User user, Item item) {
+        return likeRepository.findByUserAndItem(user, item)
+                .orElseThrow(() -> new CustomException(ErrorCode.LIKE_NOT_FOUND));
+    }
+
+    public Optional<Like> findOpt(User user, Item item) {
         return likeRepository.findByUserAndItem(user, item);
     }
 }

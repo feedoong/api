@@ -16,8 +16,10 @@ import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromRequest;
 import static io.feedoong.api.shared.util.ApiDocumentationUtils.fromResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -56,6 +58,25 @@ public class LikeControllerRestDocsTest extends BaseRestDocsTest {
                         responseFields(
                                 fieldWithPath("itemId").type(JsonFieldType.NUMBER).description("아이템 ID"),
                                 fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("좋아요 여부")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("DELETE /v2/likes/item/{itemId} - unlike")
+    public void unlike() throws Exception {
+        LikeItemDTO likeItemDTO = LikeFactory.createLikeItemDTO();
+        doNothing().when(likeService).unlike(any(UserDetails.class), anyLong());
+
+        mockMvc.perform(delete("/v2/likes/item/{itemId}", likeItemDTO.getItemId())
+                        .header("Authorization", bearerToken))
+                .andDo(print())
+                .andExpect(status().isNoContent())
+                .andDo(document("v2/likes/unlike",
+                        fromRequest(),
+                        fromResponse(),
+                        pathParameters(
+                                parameterWithName("itemId").description("좋아요 취소할 아이템 ID")
                         )
                 ));
     }

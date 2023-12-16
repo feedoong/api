@@ -65,7 +65,7 @@ class LikeServiceTest extends BaseServiceTest {
             @BeforeEach
             void prepare() {
                 Like like = LikeFactory.create(user, item);
-                when(likeHelper.findByUserAndItem(any(User.class), any(Item.class)))
+                when(likeHelper.findOpt(any(User.class), any(Item.class)))
                         .thenReturn(Optional.of(like));
             }
 
