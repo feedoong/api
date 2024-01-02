@@ -28,11 +28,7 @@ public class UserHelper {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
-    public Optional<User> findOptByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-    public Optional<User> findOptionalByUsername(String username) {
+    public Optional<User> findOptByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
