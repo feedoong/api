@@ -33,4 +33,21 @@ public class User extends BaseEntity {
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
+
+    public static User of(String name, String email, String profileImageUrl, String username) {
+        return User.builder()
+                .name(name)
+                .email(email)
+                .profileImageUrl(profileImageUrl)
+                .username(username)
+                .build();
+    }
+
+    public Boolean isDeactivated() {
+        return this.deletedAt == null;
+    }
+
+    public void reactivate() {
+        this.deletedAt = null;
+    }
 }
