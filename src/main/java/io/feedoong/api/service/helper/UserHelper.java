@@ -19,8 +19,24 @@ public class UserHelper {
         return userRepository.findByEmail(email);
     }
 
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public Optional<User> findOptByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public Optional<User> findOptNotDeletedByEmail(String email) {
+        return userRepository.findByEmailAndDeletedAtIsNull(email);
     }
 }

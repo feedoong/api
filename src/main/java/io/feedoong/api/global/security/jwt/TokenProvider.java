@@ -23,6 +23,7 @@ public class TokenProvider {
     private static final int BEARER_PREFIX_LENGTH = BEARER_PREFIX.length();
 
     private static final long EXPIRY_AMOUNT = 1;
+    private static final long EXPIRY_AMOUNT_FOR_REFRESH_TOKEN = 180;
     private static final ChronoUnit EXPIRY_UNIT = ChronoUnit.DAYS;
 
     public String create(User user) {
@@ -35,6 +36,20 @@ public class TokenProvider {
                 .setSubject(subject)
                 .setIssuer(ISSUER)
                 .setIssuedAt(issuedAt)
+                .setExpiration(expiryDate)
+                .compact();
+    }
+
+    public String createRefreshToken(User user) {
+        String subject = user.getEmail();
+        Date now = new Date();
+        Date expiryDate = getExpiryDate(EXPIRY_AMOUNT_FOR_REFRESH_TOKEN, EXPIRY_UNIT);
+
+        return Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setSubject(subject)
+                .setIssuer(ISSUER)
+                .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .compact();
     }

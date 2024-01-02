@@ -33,4 +33,9 @@ public class RefreshToken extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public RefreshToken(String refreshToken, User user) {
+        this.tokenValue = refreshToken;
+        this.user = user;
+    }
 }

@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 public class SubscriptionHelper {
     private final SubscriptionRepository subscriptionRepository;
 
+    public Subscription save(Subscription subscription) {
+        return subscriptionRepository.save(subscription);
+    }
+
     public Subscription getSubscription(User user, Channel channel) {
         return subscriptionRepository.findByUserAndChannel(user, channel)
                 .orElseThrow(() -> new CustomException(ErrorCode.SUBSCRIPTION_NOT_FOUND));

@@ -37,4 +37,11 @@ public class Subscription extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public static Subscription of(User user, Channel channel) {
+        return Subscription.builder()
+                .user(user)
+                .channel(channel)
+                .build();
+    }
 }
