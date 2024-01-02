@@ -37,7 +37,7 @@ public class UserService {
 
     private final String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
 
-    private final List<String> fruitNames = new ArrayList<>(Arrays.asList("apple", "banana", "cherry", "grape", "kiwi", "lemon", "mango", "orange", "peach", "pear", "pineapple", "strawberry"));
+    private final List<String> fruitNames = Arrays.asList("apple", "banana", "cherry", "grape", "kiwi", "lemon", "mango", "orange", "peach", "pear", "pineapple", "strawberry");
 
     @Transactional
     public GoogleLoginInfoDTO googleLogin(String googleAccessToken) {
