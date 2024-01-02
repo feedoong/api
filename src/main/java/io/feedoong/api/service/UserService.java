@@ -16,7 +16,7 @@ import io.feedoong.api.service.helper.ChannelHelper;
 import io.feedoong.api.service.helper.RefreshTokenHelper;
 import io.feedoong.api.service.helper.SubscriptionHelper;
 import io.feedoong.api.service.helper.UserHelper;
-import io.feedoong.api.service.parser.EmailParser;
+import io.feedoong.api.global.util.EmailParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

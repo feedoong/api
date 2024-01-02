@@ -1,4 +1,4 @@
-package io.feedoong.api.service.parser;
+package io.feedoong.api.global.util;
 
 import io.feedoong.api.global.exception.CustomException;
 import io.feedoong.api.global.exception.ErrorCode;
