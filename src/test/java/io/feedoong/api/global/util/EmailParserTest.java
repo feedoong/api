@@ -1,12 +1,12 @@
 package io.feedoong.api.global.util;
 
 import io.feedoong.api.global.exception.ErrorCode;
-import io.feedoong.api.shared.util.TestAssertionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.feedoong.api.shared.util.TestAssertionUtils.assertThrowsCustomException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("EmailParser 클래스")
@@ -19,7 +19,7 @@ class EmailParserTest {
     class GetUsernameFromEmail {
 
         @Nested
-        @DisplayName("@이 존재하고, @ 앞뒤로 문자열이 존재하는 이메일의 주어지면")
+        @DisplayName("@이 존재하고, @ 앞뒤로 문자열이 존재하는 이메일이 주어지면")
         class WithValidEmail {
 
             private String validEmail;
@@ -51,7 +51,7 @@ class EmailParserTest {
             @Test
             @DisplayName("INVALID_EMAIL_FORMAT CustomException을 던진다.")
             public void shouldThrow_INVALID_EMAIL_FORMAT_CustomException() throws Exception {
-                TestAssertionUtils.assertThrowsCustomException(() -> emailParser.getUsernameFromEmail(invalidEmail))
+                assertThrowsCustomException(() -> emailParser.getUsernameFromEmail(invalidEmail))
                         .with(ErrorCode.INVALID_EMAIL_FORMAT);
             }
         }
@@ -70,7 +70,7 @@ class EmailParserTest {
             @Test
             @DisplayName("INVALID_EMAIL_FORMAT CustomException을 던진다.")
             public void shouldThrow_INVALID_EMAIL_FORMAT_CustomException() throws Exception {
-                TestAssertionUtils.assertThrowsCustomException(() -> emailParser.getUsernameFromEmail(invalidEmail))
+                assertThrowsCustomException(() -> emailParser.getUsernameFromEmail(invalidEmail))
                         .with(ErrorCode.INVALID_EMAIL_FORMAT);
             }
         }
