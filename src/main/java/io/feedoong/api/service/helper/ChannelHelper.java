@@ -18,8 +18,14 @@ import java.util.Optional;
 public class ChannelHelper {
     private final ChannelRepository channelRepository;
 
+    private final String FEEDOONG_CHANNEL_URL = "https://velog.io/@feedoong";
+
     public Page<Channel> getSubscribedChannels(Pageable pageable, User user) {
         return channelRepository.findSubscribedChannelsByUser(pageable, user);
+    }
+
+    public Optional<Channel> findOptFeedoongChannel() {
+        return channelRepository.findChannelByUrl(FEEDOONG_CHANNEL_URL);
     }
 
     public Channel getChannel(Long id) {

@@ -2,7 +2,9 @@ package io.feedoong.api.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.feedoong.api.domain.channel.Channel;
 import io.feedoong.api.domain.refreshtoken.RefreshToken;
+import io.feedoong.api.domain.subscription.Subscription;
 import io.feedoong.api.domain.user.User;
 import io.feedoong.api.global.exception.CustomException;
 import io.feedoong.api.global.exception.ErrorCode;
@@ -10,7 +12,9 @@ import io.feedoong.api.global.security.jwt.TokenProvider;
 import io.feedoong.api.global.util.AuthenticationHeaderHandler;
 import io.feedoong.api.service.dto.GoogleLoginInfoDTO;
 import io.feedoong.api.service.dto.GoogleUser;
+import io.feedoong.api.service.helper.ChannelHelper;
 import io.feedoong.api.service.helper.RefreshTokenHelper;
+import io.feedoong.api.service.helper.SubscriptionHelper;
 import io.feedoong.api.service.helper.UserHelper;
 import io.feedoong.api.service.parser.EmailParser;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,8 @@ public class UserService {
     private final AuthenticationHeaderHandler authenticationHeaderHandler;
     private final TokenProvider tokenProvider;
     private final UserHelper userHelper;
+    private final ChannelHelper channelHelper;
+    private final SubscriptionHelper subscriptionHelper;
     private final RefreshTokenHelper refreshTokenHelper;
     private final EmailParser emailParser;
 
@@ -47,8 +53,18 @@ public class UserService {
         String parsedUsername = emailParser.getUsernameFromEmail(googleUser.getEmail());
         String username = generateUniqueUsername(parsedUsername);
 
-        User user = processUserLogin(googleUser, username);
+        boolean existsByEmail = userHelper.existsByEmail(googleUser.getEmail());
+        if (!existsByEmail) {
+            User user = createNewUser(googleUser, username);
+            subscribeFeedoongChannel(user);
+        } else {
+            if (isDeletedUser(googleUser)) {
+                reactivateUser(googleUser);
+                // TODO: reactivate all subscriptions & views
+            }
+        }
 
+        User user = userHelper.findByEmail(googleUser.getEmail());
         String accessTokenValue = tokenProvider.create(user);
         String refreshTokenValue = tokenProvider.createRefreshToken(user);
         RefreshToken refreshToken = new RefreshToken(refreshTokenValue, user);
@@ -86,31 +102,39 @@ public class UserService {
         throw new CustomException(ErrorCode.UNIQUE_USERNAME_CREATION_FAILED);
     }
 
-    private User processUserLogin(GoogleUser googleUser, String username) {
-        boolean existsByEmail = userHelper.existsByEmail(googleUser.getEmail());
+    private User createNewUser(GoogleUser googleUser, String username) {
+        User newUser = User.of(
+                googleUser.getName(),
+                googleUser.getEmail(),
+                googleUser.getPicture(),
+                username
+        );
+        return userHelper.save(newUser);
+    }
 
-        if (!existsByEmail) {
-            User newUser = User.of(
-                    googleUser.getName(),
-                    googleUser.getEmail(),
-                    googleUser.getPicture(),
-                    username
-            );
-            userHelper.save(newUser);
-            // TODO: subscribe feedoong channel
+    /**
+     * 기존에 ID 고정 조회 방식 대신 url 조회로 변경
+     * 개발 환경 혹은 대표 url 변경과 같은 이유로 조회가 안될 수 있음을 고려하여
+     * Optional 하게 처리
+     *
+     * isEmpty() 인 경우 대응을 위한 알림 처리 필요
+     */
+    private void subscribeFeedoongChannel(User user) {
+        Optional<Channel> optFeedoongChannel = channelHelper.findOptFeedoongChannel();
 
-            return newUser;
-        } else {
-            Optional<User> optNotDeletedUser = userHelper.findOptNotDeletedByEmail(googleUser.getEmail());
-
-            if (optNotDeletedUser.isEmpty()) {
-                User user = userHelper.findByEmail(googleUser.getEmail());
-                user.reactivate();
-                // TODO: reactivate all subscriptions & views
-                return user;
-            } else {
-                return optNotDeletedUser.get();
-            }
+        if (optFeedoongChannel.isPresent()) {
+            Subscription subscription = Subscription.of(user, optFeedoongChannel.get());
+            subscriptionHelper.save(subscription);
         }
+    }
+
+    private boolean isDeletedUser(GoogleUser googleUser) {
+        Optional<User> optNotDeletedUser = userHelper.findOptNotDeletedByEmail(googleUser.getEmail());
+        return optNotDeletedUser.isEmpty();
+    }
+
+    private void reactivateUser(GoogleUser googleUser) {
+        User user = userHelper.findByEmail(googleUser.getEmail());
+        user.reactivate();
     }
 }
